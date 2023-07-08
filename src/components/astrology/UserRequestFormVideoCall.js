@@ -85,6 +85,7 @@ class UserRequestForm extends React.Component {
       occupation: this.state.occupation,
       topic_of_cnsrn: this.state.topic_of_cnsrn,
       entertopic_of_cnsrn: this.state.entertopic_of_cnsrn,
+      type: "Video",
     };
     axiosConfig
       .post(`/user/add_chat_intake`, obj)

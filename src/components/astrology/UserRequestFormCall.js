@@ -75,6 +75,7 @@ class UserRequestForm extends React.Component {
       occupation: this.state.occupation,
       topic_of_cnsrn: this.state.topic_of_cnsrn,
       entertopic_of_cnsrn: this.state.entertopic_of_cnsrn,
+      type: "Call",
     };
     console.log(astroId);
     axiosConfig
