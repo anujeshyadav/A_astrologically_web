@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Card, Col, Container, Input, Row } from "reactstrap";
+import Swiper from "react-id-swiper";
 
 import axios from "axios";
 import { Button, ButtonGroup } from "reactstrap";
@@ -23,6 +24,43 @@ function Bookpoojadetail() {
   const Param = useParams();
   const history = useHistory();
   const [poojaform, setpoojaform] = useState(false);
+
+  const settings = {
+    loop: true,
+    slidesPerView: 4,
+    grabCursor: true,
+    spaceBetween: 30,
+
+    breakpoints: {
+      1024: {
+        slidesPerView: 4,
+      },
+      768: {
+        slidesPerView: 3,
+      },
+      640: {
+        slidesPerView: 2,
+      },
+      320: {
+        slidesPerView: 1,
+      },
+    },
+    watchSlidesVisibility: true,
+    navigation: {
+      nextEl: ".swiper-button-next",
+      prevEl: ".swiper-button-prev",
+    },
+    renderPrevButton: () => (
+      <button className="swiper-button-prev ht-swiper-button-nav gt-1">
+        <i className="pe-7s-angle-left" />
+      </button>
+    ),
+    renderNextButton: () => (
+      <button className="swiper-button-next ht-swiper-button-nav gt-2">
+        <i className="pe-7s-angle-right" />
+      </button>
+    ),
+  };
 
   const onCheckboxBtnClick = (selected, i) => {
     const index = cSelected.indexOf(selected);
@@ -50,6 +88,7 @@ function Bookpoojadetail() {
       });
     // setPooja(bookpooja);
   }, [Param]);
+
   const handlebookpooja = () => {
     const poojaprice = Pooja?.pooja_price;
     const productprice = cSelected?.map((value) => value?.price);
@@ -147,67 +186,72 @@ function Bookpoojadetail() {
                 </div>
               </Row>
               <Row>
-                {Pooja?.product?.length > 0 ? (
-                  <>
-                    {Pooja?.product?.map((ele, index) => (
-                      <>
-                        <Col key={index} lg="4" md="4" sm="6">
-                          <Card className="mycardbookpooja">
-                            <Row>
-                              <Col lg="12" md="12" sm="12">
-                                <img
-                                  width="100%"
-                                  style={{
-                                    BorderRadius: "12px",
-                                    height: "16rem",
-                                  }}
-                                  src={ele?.image}
-                                  alt="image"
-                                />
-                              </Col>
-                            </Row>
-                            <Row>
-                              <Col lg="12" md="12" sm="12">
-                                <div className="mx-1">
-                                  <Input
-                                    className="from-control"
-                                    onClick={() =>
-                                      onCheckboxBtnClick(ele, index)
-                                    }
-                                    active={cSelected.includes(1)}
-                                    type="checkbox"
-                                  />
-
-                                  <span className="mx-2 productname">
-                                    <b> {ele?.name}</b>
-                                  </span>
-                                </div>
-                                <p className="priceofadd container">
-                                  {" "}
-                                  <b className="container">Price </b>:{" "}
-                                  <i class="fa fa-inr" aria-hidden="true"></i>{" "}
-                                  {ele?.price}
-                                  Rs/-
-                                </p>
-                                <p className="mx-3 mb-2  description">
-                                  desc :- {ele?.description}
-                                </p>
-                              </Col>
-                            </Row>
-                          </Card>
-                        </Col>
-                        {/* <Col lg="4" md="6" sm="6"></Col> */}
-
-                        {/* <Col lg="2" md="4" sm="4">
-                            
-                            </Col> */}
-                        <br />
-                        {/* <hr /> */}
-                      </>
-                    ))}
-                  </>
-                ) : null}
+                <Col>
+                  {Pooja && Pooja?.product?.length ? (
+                    <>
+                      <h2 className="mt-2 mb-2">Want to Buy Something?</h2>
+                    </>
+                  ) : null}
+                </Col>
               </Row>
+              <div className="mt-2 mb-2">
+                <Swiper {...settings}>
+                  {Pooja &&
+                    Pooja?.product?.map((ele, index) => (
+                      <div
+                        className="px-2 col-lg-4 col-md-4 col-sm-6"
+                        key={ele?._id}
+                      >
+                        <Card className="mycardbookpooja">
+                          <Row>
+                            <Col lg="12" md="12" sm="12">
+                              {ele?.image ? (
+                                <>
+                                  <img
+                                    width="100%"
+                                    style={{
+                                      BorderRadius: "12px",
+                                      height: "16rem",
+                                    }}
+                                    src={ele?.image}
+                                    alt="image"
+                                  />
+                                </>
+                              ) : null}
+                            </Col>
+                          </Row>
+                          <Row>
+                            <Col lg="12" md="12" sm="12">
+                              <div className="mx-1">
+                                <Input
+                                  className="from-control inputcheckbox"
+                                  onClick={() => onCheckboxBtnClick(ele, index)}
+                                  active={cSelected.includes(1)}
+                                  type="checkbox"
+                                />
+
+                                <span className="mx-2 productname">
+                                  <b> {ele?.name}</b>
+                                </span>
+                              </div>
+                              <p className="priceofadd container">
+                                {" "}
+                                <b className="container">Price </b>:{" "}
+                                <i class="fa fa-inr" aria-hidden="true"></i>{" "}
+                                {ele?.price}
+                                Rs/-
+                              </p>
+                              <p className="mx-3 mb-2  description">
+                                desc :- {ele?.description}
+                              </p>
+                            </Col>
+                          </Row>
+                        </Card>
+                      </div>
+                    ))}
+                </Swiper>
+              </div>
+
               <div>
                 {/* <p>Selected Product: {JSON.stringify(cSelected)}</p> */}
               </div>

@@ -108,6 +108,8 @@ class UserRequestForm extends React.Component {
           .catch((error) => {
             console.log(error?.response?.data?.error);
             if (error?.response?.data?.error) {
+              this.setState({ buttonText: "Call" });
+
               swal("Try again after some Time ", "Internal server");
             }
           });
@@ -190,7 +192,7 @@ class UserRequestForm extends React.Component {
                       </Col>
                       <Col md="4">
                         <div class="form-group mtb-10">
-                          <label>Patner First Name*</label>
+                          <label>Patner First Name</label>
                           <input
                             type="text"
                             name="p_firstname"
@@ -202,7 +204,7 @@ class UserRequestForm extends React.Component {
                       </Col>
                       <Col md="4">
                         <div class="form-group mtb-10">
-                          <label> Last Name*</label>
+                          <label> Last Name</label>
                           <input
                             required
                             type="text"
@@ -215,7 +217,7 @@ class UserRequestForm extends React.Component {
                       </Col>
                       <Col md="4">
                         <div class="form-group mtb-10">
-                          <label>Patner Last Name*</label>
+                          <label>Patner Last Name</label>
                           <input
                             type="text"
                             name="p_lastname"
@@ -240,7 +242,7 @@ class UserRequestForm extends React.Component {
                       </Col>
                       <Col md="4">
                         <div class="form-group mtb-10">
-                          <label> patner Date of Birth*</label>
+                          <label> patner Date of Birth</label>
                           <input
                             type="date"
                             name="p_dob"
@@ -253,7 +255,7 @@ class UserRequestForm extends React.Component {
 
                       <Col md="4">
                         <div class="form-group mtb-10">
-                          <label>Date of Time*</label>
+                          <label>Time of Birth*</label>
                           <input
                             type="time"
                             name="date_of_time"
@@ -266,7 +268,7 @@ class UserRequestForm extends React.Component {
                       </Col>
                       <Col md="4">
                         <div class="form-group mtb-10">
-                          <label> patner Date of Time*</label>
+                          <label> patner Time of Birth</label>
                           <input
                             type="time"
                             name="p_date_of_time"
@@ -293,7 +295,7 @@ class UserRequestForm extends React.Component {
                       </Col>
                       <Col md="4">
                         <div class="form-group mtb-10">
-                          <label> patner Birth Place</label>
+                          <label> Patner Birth Place</label>
                           <input
                             type="text"
                             name="p_birthPlace"

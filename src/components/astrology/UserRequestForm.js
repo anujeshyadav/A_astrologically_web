@@ -181,7 +181,7 @@ class UserRequestForm extends React.Component {
                       </Col>
                       <Col md="4">
                         <div class="form-group mtb-10">
-                          <label>Patner First Name*</label>
+                          <label>Patner First Name</label>
                           <input
                             type="text"
                             name="p_firstname"
@@ -206,7 +206,7 @@ class UserRequestForm extends React.Component {
                       </Col>
                       <Col md="4">
                         <div class="form-group mtb-10">
-                          <label>Patner Last Name*</label>
+                          <label>Patner Last Name</label>
                           <input
                             type="text"
                             name="p_lastname"
@@ -218,7 +218,7 @@ class UserRequestForm extends React.Component {
                       </Col>
                       <Col md="4">
                         <div class="form-group mtb-10">
-                          <label>Date of Birth*</label>
+                          <label>Date of Birth</label>
                           <input
                             type="date"
                             name="dob"
@@ -263,7 +263,6 @@ class UserRequestForm extends React.Component {
                             name="p_date_of_time"
                             value={this.state.p_date_of_time}
                             onChange={this.changeHandler}
-                            // required
                             placeholder="Enter Your Number"
                           />
                         </div>
@@ -285,6 +284,7 @@ class UserRequestForm extends React.Component {
                       <Col md="4">
                         <label>Country</label>
                         <Select
+                          required
                           options={Country.getAllCountries()}
                           getOptionLabel={(options) => {
                             return options["name"];
@@ -311,6 +311,7 @@ class UserRequestForm extends React.Component {
                       <Col md="4">
                         <label>State</label>
                         <Select
+                          required
                           options={State?.getStatesOfCountry(
                             this.state.selectedCountry?.isoCode
                           )}
@@ -330,6 +331,7 @@ class UserRequestForm extends React.Component {
                       <Col md="4">
                         <label>City</label>
                         <Select
+                          required
                           options={City.getCitiesOfState(
                             this.state.selectedState?.countryCode,
                             this.state.selectedState?.isoCode
@@ -363,6 +365,7 @@ class UserRequestForm extends React.Component {
                       <Col lg="6" md="6" className="mb-2">
                         <label>Gender*</label>
                         <Input
+                          required
                           id="exampleSelect"
                           name="gender"
                           type="select"
@@ -379,6 +382,7 @@ class UserRequestForm extends React.Component {
                         <div class="form-group mtb-10">
                           <label>Marital Status*</label>
                           <Input
+                            required
                             type="select"
                             name="marital_status"
                             value={this.state.marital_status}

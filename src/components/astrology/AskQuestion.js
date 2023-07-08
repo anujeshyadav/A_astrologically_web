@@ -15,6 +15,7 @@ class AskQuestion extends React.Component {
       createdAt: "",
       astroQuesList: [],
       userId: "",
+      R_question: {},
       togglebtn: true,
     };
   }
@@ -25,10 +26,12 @@ class AskQuestion extends React.Component {
     axiosConfig
       .get(`/user/list_ask_qus/${id}/${JSON.parse(user_id)}`)
       .then((response) => {
-        console.log("askquesionlist", response.data);
-        console.log(response);
+        console.log("askquesionlist", response.data.data);
         const lastindex = response.data?.data?.length - 1;
         const data = response.data.data[lastindex]?.view_button;
+        const datanew = response.data.data[lastindex];
+        console.log(datanew);
+        this.setState({ R_question: datanew });
         this.setState({ togglebtn: data });
         this.setState({
           astroQuesList: response?.data?.data,
@@ -161,6 +164,14 @@ class AskQuestion extends React.Component {
                               {this.state.createdAt.split("T")[1]}
                             </span>
                           </li>
+                          <li>
+                            Remaining Question Count:{" "}
+                            <span>{this.state.R_question?.remaining_qus}</span>
+                          </li>
+                          <li>
+                            Question Count Total:{" "}
+                            <span>{this.state.R_question?.totalQus}</span>
+                          </li>
 
                           <li>
                             Status:{" "}
@@ -211,7 +222,8 @@ class AskQuestion extends React.Component {
                           </li>
                         </ul>
                         <div className="supp-4">
-                          {this.state.togglebtn === "false" ? null : (
+                          {this.state.togglebtn === "false" ||
+                          this.state.R_question?.remaining_qus === 0 ? null : (
                             <>
                               <h3>Write Your Question</h3>
 

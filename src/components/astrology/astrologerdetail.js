@@ -4,6 +4,7 @@ import { Container, Row, Col, Button } from "reactstrap";
 import LayoutOne from "../../layouts/LayoutOne";
 import Tab from "react-bootstrap/Tab";
 import Rating from "@mui/material/Rating";
+import ShowMore from "react-show-more";
 import LinearProgress from "@mui/material/LinearProgress";
 import Nav from "react-bootstrap/Nav";
 import astrologinbg from "../../assets/img/astrologin-bg.jpg";
@@ -54,6 +55,7 @@ class AstrologerDetail extends React.Component {
 
     this.state = {
       modal: false,
+      viewMore: 1,
     };
 
     this.toggle = this.toggle.bind(this);
@@ -71,7 +73,7 @@ class AstrologerDetail extends React.Component {
       axiosConfig
         .get(`/admin/getoneAstro/${id}`)
         .then((response) => {
-          console.log("getoneastro", response.data?.data);
+          // console.log("getoneastro", response.data?.data);
           if (response.data.data?.callingStatus === "Busy") {
             console.log("Busy");
           }
@@ -111,8 +113,8 @@ class AstrologerDetail extends React.Component {
     axiosConfig
       .get(`/user/allRevieAstro/${id}`)
       .then((res) => {
-        // console.log(res.data.data);
-        this.setState({ GtRating: res.data.data });
+        console.log(res.data.data);
+        this.setState({ GtRating: res.data.data.slice(0, 6) });
       })
       .catch((err) => console.log(err));
     localStorage.setItem("videoCallAstro_id", id);
@@ -141,7 +143,21 @@ class AstrologerDetail extends React.Component {
         console.log(error);
       });
   };
-
+  viewmorecomment = (e) => {
+    e.preventDefault();
+    const start = this.state.viewMore + 10;
+    this.setState({ viewMore: start });
+    const { id } = this.props.match.params;
+    axiosConfig
+      .get(`/user/allRevieAstro/${id}`)
+      .then((res) => {
+        console.log(res.data.data);
+        this.setState({
+          GtRating: res.data.data.slice(0, this.state.viewMore),
+        });
+      })
+      .catch((err) => console.log(err));
+  };
   handleStartChat = () => {
     let userId = JSON.parse(localStorage.getItem("user_id"));
     // const { id } = this.props.match.params;
@@ -733,9 +749,12 @@ class AstrologerDetail extends React.Component {
                           {this.state.GtRating !== " " ? (
                             <>
                               {this.state.GtRating?.map((value) => (
-                                <div key={value?._id} className="single-review">
+                                <div
+                                  key={value?._id}
+                                  className="single-review "
+                                >
                                   {" "}
-                                  <div className="review-img">
+                                  <div className="review-img ">
                                     <img
                                       width="100px"
                                       height="80px"
@@ -756,6 +775,9 @@ class AstrologerDetail extends React.Component {
                                           >
                                             {value?.userid?.fullname}
                                           </h4>
+                                          <p className="mx-2">
+                                            {value?.createdAt.split("T")[0]}
+                                          </p>
                                         </div>
                                         <div className="review-rating">
                                           <PrettyRating
@@ -774,7 +796,7 @@ class AstrologerDetail extends React.Component {
                                           textTransform: "capitalize",
                                         }}
                                       >
-                                        {value?.comment}
+                                        {value?.comment.slice(0, 150)}
                                       </p>
                                     </div>
                                   </div>
@@ -783,6 +805,12 @@ class AstrologerDetail extends React.Component {
                             </>
                           ) : null}
                         </div>
+                        <Button
+                          onClick={(e) => this.viewmorecomment(e)}
+                          color="primary"
+                        >
+                          View More Comments
+                        </Button>
                       </div>
                       {/* {/ avai /} */}
                       <div className="col-md-6">
