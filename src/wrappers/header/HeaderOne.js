@@ -5,6 +5,7 @@ import NavMenu from "../../components/header/NavMenu";
 import IconGroup from "../../components/header/IconGroup";
 import MobileMenu from "../../components/header/MobileMenu";
 import HeaderTop from "../../components/header/HeaderTop";
+import { Link } from "react-router-dom";
 
 const HeaderOne = ({
   layout,
@@ -61,8 +62,9 @@ const HeaderOne = ({
             <div className="col-xl-2 col-lg-2 col-md-2 col-4">
               {/* header logo */}
               <div className="logoo">
-                {/* <Logo imageUrl="/assets/img/logo/logo.png" /> */}
-                <h3 className="stltext">Astro Vipra </h3>
+                <Link className="" to="/">
+                  <h3 className="stltext">Astro Vipra </h3>
+                </Link>
               </div>
             </div>
             <div className="col-xl-8 col-lg-8 d-none d-lg-block">

@@ -348,15 +348,25 @@
           padding: 0 10px;
         }
         > a {
+
           font-size: 13px;
           font-weight: 500;
           line-height: 94px;
-
           display: inline-block;
-
-          letter-spacing: 0.8px;
-
+          /* letter-spacing: 0.8px; */
           color: #000;
+
+
+
+          // font-size: 13px;
+          // font-weight: 500;
+          // line-height: 94px;
+
+          // display: inline-block;
+
+          // letter-spacing: 0.8px;
+
+          // color: #000;
           i {
             font-size: 15px;
 
@@ -405,7 +415,7 @@
 }
 
 .stick .main-menu nav ul li a {
-  line-height: 95px;
+  line-height: 94px;
 }
 
 .stick .logo,

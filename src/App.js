@@ -245,6 +245,16 @@ const ServiceList = lazy(() => import("./components/astrology/ServiceList"));
 const AllAstrologerList = lazy(() =>
   import("./components/astrology/allastrologerlist")
 );
+const AllChatAstrologerList = lazy(() =>
+  import("./components/astrology/ChatAstrologerlist")
+);
+const WaitingPage = lazy(() => import("./components/WaitingPage/Waitingpage"));
+const WaitingPagechat = lazy(() =>
+  import("./components/WaitingPage/WaitingPageChat")
+);
+const WaitingPagevideo = lazy(() =>
+  import("./components/WaitingPage/WaitingPageVideo")
+);
 const AllAstrochatList = lazy(() =>
   import("./components/astrology/allastrochatlist")
 );
@@ -793,6 +803,22 @@ const App = (props) => {
                   <Route
                     path={process.env.PUBLIC_URL + "/allastrologerlist"}
                     component={AllAstrologerList}
+                  />
+                  <Route
+                    path={process.env.PUBLIC_URL + "/allchatastrologerlist"}
+                    component={AllChatAstrologerList}
+                  />
+                  <Route
+                    path={process.env.PUBLIC_URL + "/waitingpage"}
+                    component={WaitingPage}
+                  />
+                  <Route
+                    path={process.env.PUBLIC_URL + "/waitingpagechat"}
+                    component={WaitingPagechat}
+                  />
+                  <Route
+                    path={process.env.PUBLIC_URL + "/waitingpagevideo"}
+                    component={WaitingPagevideo}
                   />
                   <Route
                     path={process.env.PUBLIC_URL + "/allastrochatlist"}

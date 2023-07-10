@@ -98,6 +98,7 @@ class UserRequestForm extends React.Component {
               console.log(res);
               if (res.data.status === true) {
                 this.props.history.push("/chatApp");
+                // this.props.history.push("/waitingpagechat");
               } else swal("Not having Enough Balance");
             })
             .catch((err) => {

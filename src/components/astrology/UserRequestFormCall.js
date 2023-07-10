@@ -92,6 +92,8 @@ class UserRequestForm extends React.Component {
       .post(`/user/add_chat_intake`, obj)
       .then((response) => {
         console.log("aaaaaaaaaaaa", response.data.data);
+        // this.props.history.push("/waitingpage");
+
         let object = {
           userid: userId,
           astroid: astroId,

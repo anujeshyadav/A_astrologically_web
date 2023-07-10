@@ -105,6 +105,7 @@ class UserRequestForm extends React.Component {
       .then((res) => {
         if (res.data.status === true) {
           this.props.history.push(`/userVideoCall/${userId}`);
+          // this.props.history.push(`/waitingpagevideo`);
         } else swal("Not Having Enough Balance");
       })
       .catch((err) => {

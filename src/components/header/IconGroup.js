@@ -86,13 +86,15 @@ const IconGroup = ({
 
   const fetchCustomer = async () => {
     let user_id = JSON.parse(localStorage.getItem("user_id"));
-    await ViewOneUser(user_id)
-      .then((res) => {
-        setCustomer(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    if (user_id) {
+      await ViewOneUser(user_id)
+        .then((res) => {
+          setCustomer(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   };
   useEffect(() => {
     let data = localStorage.getItem("token");
@@ -324,15 +326,17 @@ IconGroup.propTypes = {
 
 export const Fetchuserdetail = async () => {
   let user_id = JSON.parse(localStorage.getItem("user_id"));
-  await axiosConfig
-    .get(`/user/viewoneuser/${user_id}`)
-    .then((response) => {
-      sessionStorage.setItem("userBalance", response?.data?.data?.amount);
-      console.log(response.data.data.amount);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+  if (user_id) {
+    await axiosConfig
+      .get(`/user/viewoneuser/${user_id}`)
+      .then((response) => {
+        sessionStorage.setItem("userBalance", response?.data?.data?.amount);
+        console.log(response.data.data.amount);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
 };
 const mapStateToProps = (state) => {
   return {
