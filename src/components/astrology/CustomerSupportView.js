@@ -11,7 +11,9 @@ class CustomerSupportView extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      myQuestion: "",
       data: {},
+      TicketNumber: "",
       desc: "",
       subject: "",
       createdAt: "",
@@ -21,14 +23,26 @@ class CustomerSupportView extends React.Component {
   }
   componentDidMount() {
     let { id } = this.props.match.params;
-    console.log(id);
 
-    // console.log('jdhgkfjgkjd', astroId)
+    let user_id = localStorage.getItem("user_id");
+
     axiosConfig
       .get(`/user/getoneTicket/${id}`)
       .then((response) => {
-        console.log(response.data.data);
+        console.log(response?.data?.data);
+
+        let ticketno = response?.data?.data?.ticketNo;
+        this.setState({ TicketNumber: ticketno });
         this.setState({ data: response.data.data });
+        axiosConfig
+          .get(`/user/CmntByTicketNo/${ticketno}`)
+          .then((res) => {
+            console.log(res?.data?.data);
+            this.setState({ astroQuesList: res?.data?.data });
+          })
+          .then((err) => {
+            console.log(err);
+          });
         this.setState({
           fullname: response.data.data.fullname,
           desc: response.data.data.desc,
@@ -43,21 +57,39 @@ class CustomerSupportView extends React.Component {
         console.log(error);
       });
 
-    // this.getQuestionList(id)
-    let user_id = localStorage.getItem("user_id");
-    console.log(user_id);
-    axiosConfig
-      .get(`/user/list_ask_qus/${id}/${JSON.parse(user_id)}`)
-      .then((response) => {
-        console.log("fgshdfhsdfhs", response.data.data);
-        this.setState({
-          astroQuesList: response.data.data,
-        });
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    // axiosConfig
+    //   .get(`/user/list_ask_qus/${id}/${JSON.parse(user_id)}`)
+    //   .then((response) => {
+    //     console.log("list of ask question", response.data.data);
+    //     this.setState({
+    //       astroQuesList: response.data.data,
+    //     });
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //   });
   }
+  handleSubmitQuestion = (e) => {
+    e.preventDefault();
+    let { ticketid } = this.props.match.params;
+    let user_id = JSON.parse(localStorage.getItem("user_id"));
+
+    let load = {
+      userid: user_id,
+      ticketNo: this.state.TicketNumber,
+      desc: this.state.myQuestion,
+    };
+    axiosConfig
+      .post(`/user/addTicketComment`, load)
+      .then((res) => {
+        console.log(res.data.data);
+        this.setState({ myQuestion: "" });
+        this.componentDidMount();
+      })
+      .catch((err) => {
+        console.log(err.response);
+      });
+  };
   render() {
     return (
       <LayoutOne headerTop="visible">
@@ -119,6 +151,29 @@ class CustomerSupportView extends React.Component {
                             Description: <span>{this.state.data?.desc}</span>
                           </li>
                         </ul>
+                        <section>
+                          <div className="container">
+                            {this.state.astroQuesList &&
+                              this.state.astroQuesList?.map((value, index) => (
+                                <>
+                                  <div className="py-2" key={index}>
+                                    <p>
+                                      {value?.desc && (
+                                        <>
+                                          Question: <b> {value?.desc} ?</b>
+                                        </>
+                                      )}
+                                      {value?.reply && (
+                                        <>
+                                          Reply:<b> {value?.reply} </b>
+                                        </>
+                                      )}
+                                    </p>
+                                  </div>
+                                </>
+                              ))}
+                          </div>
+                        </section>
                         <div className="supp-4">
                           <h3>Write Your Commets</h3>
                           <form>
@@ -126,12 +181,23 @@ class CustomerSupportView extends React.Component {
                               <div class="form-group mtb-10">
                                 <label>Description*</label>
                                 <textarea
+                                  value={this.state.myQuestion}
+                                  onChange={(e) =>
+                                    this.setState({
+                                      myQuestion: e.target.value,
+                                    })
+                                  }
                                   className="form-control stp"
                                   placeholder="support ticket description..."
                                 ></textarea>
                               </div>
                             </Col>
-                            <Button className="btn btn-primary">Submit</Button>
+                            <Button
+                              onClick={this.handleSubmitQuestion}
+                              className="btn btn-primary"
+                            >
+                              Submit
+                            </Button>
                           </form>
                         </div>
                       </div>

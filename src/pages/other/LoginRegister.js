@@ -41,7 +41,7 @@ export default class LoginRegister extends Component {
     // console.log(event.target.files[0]);
   };
 
-  otpHandler = () => {
+  onSuccesotpandLogin = () => {
     console.log(this.state.mobile);
     axiosConfig
       .post(`/user/userVryfyotp`, {
@@ -97,46 +97,46 @@ export default class LoginRegister extends Component {
       auth
     );
   };
+  newConfigureCaptcha = () => {
+    window.recaptchaVerifier = new RecaptchaVerifier(
+      "sign-in-button",
+      {
+        size: "invisible",
+        callback: (response) => {
+          console.log(response);
+          console.log("Verified captcha");
+        },
+        defaultCountry: "IN",
+      },
+      auth
+    );
+  };
   onSignInSubmit = () => {
-    this.ConfigureCaptcha();
-    this.setState({ loginText: "Wait" });
+    // e.preventDefault();
+    this.newConfigureCaptcha();
     const appVerifier = window.recaptchaVerifier;
-    let number = "+91" + this.state.mobile;
-    // console.log(number);
+    const number = "+91" + this.state.mobile;
+    let newno = JSON.stringify(number);
+    console.log("login mobile no:" + number, newno);
     signInWithPhoneNumber(auth, number, appVerifier)
       .then((confirmationResult) => {
-        // console.log("otp has been sent", confirmationResult);
         window.confirmationResult = confirmationResult;
+        console.log("OTP has been sent", confirmationResult);
+        swal("OTP send Succesfully ");
       })
       .catch((error) => {
         console.log(error.response.data);
         // Error; SMS not sent
-        this.setState({ loginText: "Login" });
-        // swal("SMS Not send", "Server Error");
+        // this.setState({ loginText: "Login" });
+        swal("SMS Not send", "Server Error");
         // ...
       });
   };
 
-  onOtpverify = (e) => {
+  onRegistrationOtpverify = (e) => {
     e.preventDefault();
     let code = this.state.otp;
-    window.confirmationResult
-      .confirm(code)
-      .then(async (res) => {
-        console.log("User_Verified", res);
-        this.otpHandler();
-      })
-      .catch(async (err) => {
-        console.log(err);
-        const otptext = document.getElementById("otptext");
-        otptext.innerText = "OTP Does Not Match, Try again";
-        // swal("Otp Does Not Veryfied");
-      });
-  };
-
-  onResOtpverify = (e) => {
-    e.preventDefault();
-    let code = this.state.otp;
+    console.log(code);
     window.confirmationResult
       .confirm(code)
       .then(async (res) => {
@@ -151,20 +151,38 @@ export default class LoginRegister extends Component {
       });
   };
 
-  loginHandler = (e) => {
+  OnloginVerifyOTP = (e) => {
     e.preventDefault();
-    let obj = {
-      mobile: parseInt(this.state.mobile),
-    };
-    axiosConfig
-      .post(`/user/userlogin`, obj)
+    let code = this.state.otp;
+    window.confirmationResult
+      .confirm(code)
+      .then(async (res) => {
+        console.log("User_Verified", res);
+        this.onSuccesotpandLogin();
+      })
+      .catch(async (err) => {
+        console.log(err);
+        const otptext = document.getElementById("otptext");
+        otptext.innerText = "OTP Does Not Match, Try again";
+        // swal("Otp Does Not Veryfied");
+      });
+  };
+
+  loginHandler = async (e) => {
+    e.preventDefault();
+    // console.log(obj);
+    await axiosConfig
+      .post(`/user/userlogin`, {
+        mobile: this.state.mobile,
+      })
       .then((response) => {
         console.log("userLogin", response.data);
+        // swal("otp Send Successfully");
+        this.onSignInSubmit();
+
         if (response.data.status === true) {
           this.setState({ otpMsg: response.data.msg });
-          this.onSignInSubmit();
 
-          // swal("otp Send Successfully");
           // this.setState({ loginText: "Wait" });
           // const otptext = document.getElementById("otptext");
           // otptext.innerText = "Enter OTP below";
@@ -187,13 +205,13 @@ export default class LoginRegister extends Component {
     this.setState({ [e.target.name]: e.target.value });
   };
 
-  RegistrationOtpVerify = () => {
+  handleStartOtpSendReg = () => {
     this.ConfigureCaptcha();
     this.setState({ RegistrationView: false });
     window.scrollTo(0, 0);
     const appVerifier = window.recaptchaVerifier;
     let number = "+91" + this.state.mobile;
-    // console.log(number);
+
     signInWithPhoneNumber(auth, number, appVerifier)
       .then((confirmationResult) => {
         swal("otp has been sent");
@@ -203,7 +221,6 @@ export default class LoginRegister extends Component {
         console.log(error.response.data);
         // Error; SMS not sent
         this.setState({ Register: "Register" });
-
         swal("OTP Not Send", "Some Error Occured Try again");
 
         // swal("SMS Not send", "Server Error");
@@ -257,19 +274,15 @@ export default class LoginRegister extends Component {
   submitHandler = (e) => {
     e.preventDefault();
     this.setState({ Register: "wait" });
-    this.RegistrationOtpVerify();
+    this.handleStartOtpSendReg();
   };
   render() {
     // console.log(this.state.otp);
     return (
       <Fragment>
-        {/* <MetaTags>
+        <MetaTags>
           <title>AstroVipra</title>
-          <meta
-            name="description"
-            content="Compare page of flone react minimalist eCommerce template."
-          />
-        </MetaTags> */}
+        </MetaTags>
         <LayoutOne headerTop="visible">
           <div id="recaptcha-container"></div>
           <div className="login-register-area pt-100 pb-100">
@@ -299,7 +312,9 @@ export default class LoginRegister extends Component {
                                   Enter Otp Here
                                 </div>
 
-                                <Form onSubmit={(e) => this.onResOtpverify(e)}>
+                                <Form
+                                  onSubmit={(e) => this.OnloginVerifyOTP(e)}
+                                >
                                   <Input
                                     type="number"
                                     name="otp"
@@ -311,10 +326,7 @@ export default class LoginRegister extends Component {
                                   <div className="button-box">
                                     <div className="login-toggle-btn"></div>
                                     <button type="submit">
-                                      {/* <CgSpinner
-                                        className="mr-2 animate-spin"
-                                        size={15}
-                                      /> */}
+                                      {/* login otp verify */}
                                       <span>Verify OTP </span>
                                     </button>
                                   </div>
@@ -327,6 +339,7 @@ export default class LoginRegister extends Component {
                                   id="signintext"
                                 ></div>
                                 <Form onSubmit={this.loginHandler}>
+                                  {/* <Form onSubmit={this.onSignInSubmit}> */}
                                   <div id="sign-in-button"></div>
                                   <Input
                                     type="number"
@@ -450,7 +463,11 @@ export default class LoginRegister extends Component {
                                   Enter Otp Here
                                 </div>
 
-                                <Form onSubmit={(e) => this.onOtpverify(e)}>
+                                <Form
+                                  onSubmit={(e) =>
+                                    this.onRegistrationOtpverify(e)
+                                  }
+                                >
                                   <Input
                                     type="number"
                                     name="otp"
@@ -466,10 +483,7 @@ export default class LoginRegister extends Component {
                                       className="mt-3"
                                       type="submit"
                                     >
-                                      {/* <CgSpinner
-                                        className="mr-2 animate-spin"
-                                        size={15}
-                                      /> */}
+                                      {/* registration otp verify */}
                                       <span>Verify OTP </span>
                                     </Button>
                                   </div>

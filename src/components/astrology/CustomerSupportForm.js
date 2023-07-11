@@ -41,10 +41,10 @@ class CustomerSupportForm extends React.Component {
           subject: "",
           desc: "",
         });
-        // this.getQuestionList(id)
-        // to="/customersupport"
+
         window.location.reload("/customersupport");
-        swal("Success!", "Submitted SuccessFully!", "Success");
+        window.location.reload();
+        // swal("Success!", "Submitted SuccessFully!", "Success");
       })
 
       .catch((error) => {
@@ -106,18 +106,36 @@ class CustomerSupportForm extends React.Component {
                               onChange={this.changeHandler}
                             >
                               <option>--Select --</option>
-                              <option value="1">Previous Order</option>
-                              <option value="2">Transaction Related</option>
-                              <option value="3">Technical Issue</option>
-                              <option value="4">Astrologer Related</option>
-                              <option value="5">Live event related</option>
-                              <option value="6">Offers & Coupons</option>
-                              <option value="6">General FAQs</option>
-                              <option value="6">Escalate the issue</option>
-                              <option value="6">AstroMall Related</option>
-                              <option value="6">AstroMall Related</option>
-                              <option value="6">AstroMall Related</option>
-                              <option value="6">AstroMall Related</option>
+                              <option value="Previous Order">
+                                Previous Order
+                              </option>
+                              <option value="Transaction Related">
+                                Transaction Related
+                              </option>
+                              <option value="Technical Issue">
+                                Technical Issue
+                              </option>
+                              <option value="Astrologer Related">
+                                Astrologer Related
+                              </option>
+                              <option value="Live event related">
+                                Live event related
+                              </option>
+                              <option value="Offers & Coupons">
+                                Offers & Coupons
+                              </option>
+                              <option value="General FAQs">General FAQs</option>
+                              <option value="Escalate the issue">
+                                Escalate the issue
+                              </option>
+                              <option value="AstroMall Related">
+                                AstroMall Related
+                              </option>
+                              <option value="Any Other Reason">
+                                Any Other Reason
+                              </option>
+                              {/* <option value="6">AstroMall Related</option>
+                              <option value="6">AstroMall Related</option> */}
                             </Form.Select>
                           </div>
                         </Col>
