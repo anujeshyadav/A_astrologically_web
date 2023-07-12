@@ -16,6 +16,7 @@ export default class LoginRegister extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      L_Password: "",
       Register: "Register",
       RegistrationView: true,
       loginText: "Login",
@@ -41,43 +42,43 @@ export default class LoginRegister extends Component {
     // console.log(event.target.files[0]);
   };
 
-  onSuccesotpandLogin = () => {
-    console.log(this.state.mobile);
-    axiosConfig
-      .post(`/user/userVryfyotp`, {
-        mobile: parseInt(this.state.mobile),
-        otp: "123456",
-      })
-      .then((response) => {
-        console.log("@@@####", response.data);
-        // let id = response.data.user;
-        if (response.data.status === true) {
-          this.setState({ otpMsg: response.data.msg });
-          localStorage.setItem(
-            "userData",
-            JSON.stringify(response?.data?.data)
-          );
-          localStorage.setItem("token", JSON.stringify(response?.data?.token));
-          localStorage.setItem(
-            "user_id",
-            JSON.stringify(response?.data?.data?._id)
-          );
-          localStorage.setItem(
-            "user_mobile_no",
-            JSON.stringify(response?.data?.data?.mobile)
-          );
-          if (response.data.msg === "otp verified") {
-            swal("otp verified Successfully");
-            // window.location.replace('/')
-            this.props.history.push("/");
-          }
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-        //this.setState({ errormsg: error });
-      });
-  };
+  // onSuccesotpandLogin = () => {
+  //   axiosConfig
+  //     .post(`/user/userVryfyotp`, {
+  //       mobile: parseInt(this.state.mobile),
+  //       otp: "123456",
+  //     })
+  //     .then((response) => {
+  //       console.log("@@@####", response.data);
+  //       // let id = response.data.user;
+  //       if (response.data.status === true) {
+  //         this.setState({ otpMsg: response.data.msg });
+  //         localStorage.setItem(
+  //           "userData",
+  //           JSON.stringify(response?.data?.data)
+  //         );
+  //         localStorage.setItem("token", JSON.stringify(response?.data?.token));
+  //         localStorage.setItem(
+  //           "user_id",
+  //           JSON.stringify(response?.data?.data?._id)
+  //         );
+  //         localStorage.setItem(
+  //           "user_mobile_no",
+  //           JSON.stringify(response?.data?.data?.mobile)
+  //         );
+  //         if (response.data.msg === "otp verified") {
+  //           swal("otp verified Successfully");
+  //           // window.location.replace('/')
+  //           this.props.history.push("/");
+  //         }
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //       //this.setState({ errormsg: error });
+  //     });
+  // };
+
   handlechange = (e) => {
     e.preventDefault();
     this.setState({ [e.target.name]: e.target.value });
@@ -115,9 +116,10 @@ export default class LoginRegister extends Component {
     // e.preventDefault();
     this.newConfigureCaptcha();
     const appVerifier = window.recaptchaVerifier;
+
     const number = "+91" + this.state.mobile;
-    let newno = JSON.stringify(number);
-    console.log("login mobile no:" + number, newno);
+
+    console.log("login mobile no:" + number);
     signInWithPhoneNumber(auth, number, appVerifier)
       .then((confirmationResult) => {
         window.confirmationResult = confirmationResult;
@@ -151,53 +153,58 @@ export default class LoginRegister extends Component {
       });
   };
 
-  OnloginVerifyOTP = (e) => {
-    e.preventDefault();
-    let code = this.state.otp;
-    window.confirmationResult
-      .confirm(code)
-      .then(async (res) => {
-        console.log("User_Verified", res);
-        this.onSuccesotpandLogin();
-      })
-      .catch(async (err) => {
-        console.log(err);
-        const otptext = document.getElementById("otptext");
-        otptext.innerText = "OTP Does Not Match, Try again";
-        // swal("Otp Does Not Veryfied");
-      });
-  };
+  // OnloginVerifyOTP = (e) => {
+  //   e.preventDefault();
+  //   let code = this.state.otp;
+  //   window.confirmationResult
+  //     .confirm(code)
+  //     .then(async (res) => {
+  //       console.log("User_Verified", res);
+  //       // this.onSuccesotpandLogin();
+  //     })
+  //     .catch(async (err) => {
+  //       console.log(err);
+  //       const otptext = document.getElementById("otptext");
+  //       otptext.innerText = "OTP Does Not Match, Try again";
+  //       // swal("Otp Does Not Veryfied");
+  //     });
+  // };
 
   loginHandler = async (e) => {
     e.preventDefault();
-    // console.log(obj);
-    await axiosConfig
-      .post(`/user/userlogin`, {
-        mobile: this.state.mobile,
-      })
-      .then((response) => {
-        console.log("userLogin", response.data);
-        // swal("otp Send Successfully");
-        this.onSignInSubmit();
-
-        if (response.data.status === true) {
-          this.setState({ otpMsg: response.data.msg });
-
-          // this.setState({ loginText: "Wait" });
-          // const otptext = document.getElementById("otptext");
-          // otptext.innerText = "Enter OTP below";
-          // this.props.history.push('/')
-        }
-      })
-      .catch((error) => {
-        console.log(error.response);
-        if (error.response?.data.msg === "User doesn't Exist") {
-          swal("Error!", "User doesn't Exist", "error");
-          this.setState({ loginText: "Login" });
-        }
-        // const otptext = document.getElementById("signintext");
-        // otptext.innerText = "User Not Registered With This Number";
-      });
+    if (this.state.mobile && this.state.L_Password) {
+      await axiosConfig
+        .post(`/user/loginWithPassword`, {
+          // .post(`/user/userlogin`, {
+          mobile: this.state.mobile,
+          password: this.state.L_Password,
+        })
+        .then((response) => {
+          //  console.log("userLogin", response.data);
+          localStorage.setItem(
+            "userData",
+            JSON.stringify(response?.data?.user)
+          );
+          localStorage.setItem("token", JSON.stringify(response?.data?.token));
+          localStorage.setItem(
+            "user_id",
+            JSON.stringify(response?.data?.user?._id)
+          );
+          localStorage.setItem(
+            "user_mobile_no",
+            JSON.stringify(response?.data?.user?.mobile)
+          );
+          this.props.history.push("/");
+        })
+        .catch((error) => {
+          console.log(error.response);
+          if (error.response?.data.msg === "User doesn't Exist") {
+            swal("Error!", "User doesn't Exist", "error");
+            this.setState({ loginText: "Login" });
+          }
+          //
+        });
+    } else swal("Please Enter in Input BOX");
   };
 
   changeHandler = (e) => {
@@ -306,59 +313,43 @@ export default class LoginRegister extends Component {
                       <Tab.Content>
                         <Tab.Pane eventKey="login">
                           <div className="login-form-container">
-                            {this.state.otpMsg === "otp Send Successfully" ? (
-                              <div className="login-register-form">
-                                <div style={{ color: "red" }} id="otptext">
-                                  Enter Otp Here
-                                </div>
+                            <div className="login-register-form">
+                              <div
+                                style={{ color: "red" }}
+                                id="signintext"
+                              ></div>
+                              <Form onSubmit={this.loginHandler}>
+                                {/* <Form onSubmit={this.onSignInSubmit}> */}
+                                <div id="sign-in-button"></div>
+                                <Label>Enter Mobile Number *</Label>
+                                <Input
+                                  type="number"
+                                  name="mobile"
+                                  maxLength="12"
+                                  required
+                                  placeholder="Enter Your Mobile No."
+                                  value={this.state.mobile}
+                                  onChange={this.changeHandler}
+                                />
 
-                                <Form
-                                  onSubmit={(e) => this.OnloginVerifyOTP(e)}
-                                >
-                                  <Input
-                                    type="number"
-                                    name="otp"
-                                    required
-                                    placeholder="Enter otp"
-                                    value={this.state.otp}
-                                    onChange={this.changeHandler}
-                                  />
-                                  <div className="button-box">
-                                    <div className="login-toggle-btn"></div>
-                                    <button type="submit">
-                                      {/* login otp verify */}
-                                      <span>Verify OTP </span>
-                                    </button>
-                                  </div>
-                                </Form>
-                              </div>
-                            ) : (
-                              <div className="login-register-form">
-                                <div
-                                  style={{ color: "red" }}
-                                  id="signintext"
-                                ></div>
-                                <Form onSubmit={this.loginHandler}>
-                                  {/* <Form onSubmit={this.onSignInSubmit}> */}
-                                  <div id="sign-in-button"></div>
-                                  <Input
-                                    type="number"
-                                    name="mobile"
-                                    maxLength="12"
-                                    required
-                                    placeholder="Enter Your Mobile No."
-                                    value={this.state.mobile}
-                                    onChange={this.changeHandler}
-                                  />
-                                  <div className="button-box">
-                                    <div className="login-toggle-btn"></div>
-                                    <button type="submit">
-                                      <span>{this.state.loginText}</span>
-                                    </button>
-                                  </div>
-                                </Form>
-                              </div>
-                            )}
+                                <Label>Enter Password *</Label>
+
+                                <Input
+                                  type="password"
+                                  name="L_Password"
+                                  required
+                                  placeholder="Enter Your Password"
+                                  value={this.state.L_Password}
+                                  onChange={this.changeHandler}
+                                />
+                                <div className="button-box">
+                                  <div className="login-toggle-btn"></div>
+                                  <button type="submit">
+                                    <span>{this.state.loginText}</span>
+                                  </button>
+                                </div>
+                              </Form>
+                            </div>
                           </div>
                         </Tab.Pane>
                         {/* Register the user now */}

@@ -68,7 +68,10 @@ class OtpVerify extends React.Component {
     //   };
 
     axios
-      .post("http://65.2.175.154:8000/user/verifyotp", this.state)
+      .post(
+        "https://nodejsbackend.astrologically.in/user/verifyotp",
+        this.state
+      )
 
       .then((res) => {
         console.log(res);

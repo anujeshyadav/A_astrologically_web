@@ -151,29 +151,44 @@ class CustomerSupportView extends React.Component {
                             Description: <span>{this.state.data?.desc}</span>
                           </li>
                         </ul>
-                        <section>
+                        <div>
+                          {this.state.astroQuesList.length && (
+                            <div className="container">
+                              {this.state.astroQuesList &&
+                                this.state.astroQuesList?.map(
+                                  (value, index) => (
+                                    <>
+                                      <div className="py-2" key={index}>
+                                        <p>
+                                          {value?.desc && (
+                                            <>
+                                              Question: <b> {value?.desc} ?</b>
+                                            </>
+                                          )}
+                                          {value?.reply && (
+                                            <>
+                                              Reply:<b> {value?.reply} </b>
+                                            </>
+                                          )}
+                                        </p>
+                                      </div>
+                                    </>
+                                  )
+                                )}
+                            </div>
+                          )}
+                        </div>
+                        {this.state.data?.reply && (
                           <div className="container">
-                            {this.state.astroQuesList &&
-                              this.state.astroQuesList?.map((value, index) => (
-                                <>
-                                  <div className="py-2" key={index}>
-                                    <p>
-                                      {value?.desc && (
-                                        <>
-                                          Question: <b> {value?.desc} ?</b>
-                                        </>
-                                      )}
-                                      {value?.reply && (
-                                        <>
-                                          Reply:<b> {value?.reply} </b>
-                                        </>
-                                      )}
-                                    </p>
-                                  </div>
-                                </>
-                              ))}
+                            <p>
+                              Reply:{" "}
+                              <span>
+                                <b>{this.state.data?.reply}</b>
+                              </span>
+                            </p>
                           </div>
-                        </section>
+                        )}
+
                         <div className="supp-4">
                           <h3>Write Your Commets</h3>
                           <form>
