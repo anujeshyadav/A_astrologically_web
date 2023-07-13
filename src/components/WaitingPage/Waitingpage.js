@@ -32,18 +32,8 @@ const Waitingpage = ({ location, args }) => {
     setOrder(order);
     console.log(order);
   };
-  const hanleopenmodal = (e, data) => {
-    e.preventDefault();
-    setRefund(data);
-    console.log(data);
-    toggle();
-  };
 
-  useEffect(() => {
-    if (localStorage.getItem("user_id")) {
-      fetchOrder();
-    }
-  }, []);
+  useEffect(() => {}, []);
 
   return (
     <Fragment>
@@ -54,9 +44,11 @@ const Waitingpage = ({ location, args }) => {
 
       <LayoutOne headerTop="visible">
         <Breadcrumb />
-        <div className="d-flex justify-content-center align-item-center">
-          <h3>Wait Till Astrologer Accept Your Request...</h3>
-        </div>
+        <section>
+          <div className="d-flex justify-content-center align-item-center">
+            <h3>Wait Till Astrologer Accept Your Request...</h3>
+          </div>
+        </section>
       </LayoutOne>
     </Fragment>
   );

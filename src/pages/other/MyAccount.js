@@ -292,6 +292,7 @@ export default class MyAccount extends Component {
                                 <div className="billing-info">
                                   <label>Mobile Number</label>
                                   <input
+                                    disabled
                                     type="number"
                                     name="mobile"
                                     value={this.state.mobile}

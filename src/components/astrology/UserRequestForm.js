@@ -59,7 +59,6 @@ class UserRequestForm extends React.Component {
     e.preventDefault();
     let userId = JSON.parse(localStorage.getItem("user_id"));
     let astroId = localStorage.getItem("astroId");
-
     let obj = {
       userid: userId,
       astroid: astroId,
@@ -81,11 +80,13 @@ class UserRequestForm extends React.Component {
       entertopic_of_cnsrn: this.state.entertopic_of_cnsrn,
       type: "Chat",
     };
+    console.log(obj);
 
     if (userId !== "" && userId !== null) {
       axiosConfig
         .post(`/user/add_chat_intake`, obj)
         .then((response) => {
+          console.log(response);
           // swal("Success!", "Submitted SuccessFully!", "success");
           const data = {
             userid: userId,
@@ -97,8 +98,8 @@ class UserRequestForm extends React.Component {
             .then((res) => {
               console.log(res);
               if (res.data.status === true) {
-                this.props.history.push("/chatApp");
-                // this.props.history.push("/waitingpagechat");
+                // this.props.history.push("/chatApp");
+                this.props.history.push("/waitingpagechat");
               } else swal("Not having Enough Balance");
             })
             .catch((err) => {
@@ -106,7 +107,7 @@ class UserRequestForm extends React.Component {
             });
         })
         .catch((error) => {
-          swal("Error!", "You clicked the button!", "error");
+          swal("Error!", "Error Occurred!", "error");
           console.log(error);
         });
     } else {
@@ -159,6 +160,7 @@ class UserRequestForm extends React.Component {
                         <div class="form-group mtb-10">
                           <label>Mobile Number*</label>
                           <input
+                            disabled
                             type="number"
                             name="mobile"
                             value={this.state.mobile}
@@ -463,7 +465,7 @@ class UserRequestForm extends React.Component {
                         </div>
                       </Col>
                       <Col md="12" className="mt-3">
-                        <Button className="btn btn-warning">
+                        <Button type="submit" className="btn btn-warning">
                           Start chat with {localStorage.getItem("astroname")}
                         </Button>
                       </Col>

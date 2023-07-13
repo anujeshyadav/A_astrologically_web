@@ -15,14 +15,19 @@ import { addToCart } from "../../redux/actions/cartActions";
 import LayoutOne from "../../layouts/LayoutOne";
 import Breadcrumb from "../../wrappers/breadcrumb/Breadcrumb";
 import axiosConfig from "../../axiosConfig";
-import { Button, Col, Row } from "reactstrap";
+import { Button, Col, Container, Row } from "reactstrap";
 import { Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
+import { useHistory } from "react-router-dom";
 
-const Waitingpage = ({ location, args }) => {
+import swal from "sweetalert";
+
+const WaitingPageVideo = ({ location, args }) => {
   const { pathname } = location;
   const [order, setOrder] = useState([]);
   const [modal, setModal] = useState(false);
   const [Refund, setRefund] = useState({});
+
+  const history = useHistory();
 
   const toggle = () => setModal(!modal);
   const fetchOrder = async () => {
@@ -39,9 +44,43 @@ const Waitingpage = ({ location, args }) => {
     toggle();
   };
 
+  const handlegetAcceptAstro = () => {
+    const interval = setInterval(() => {
+      let userid = JSON.parse(localStorage.getItem("user_id"));
+
+      axiosConfig
+        .get(`/user/getOnenotificationByastro/${userid}`)
+        .then((res) => {
+          console.log("request accepted ", res.data.data);
+          console.log("notificationid", res.data.data);
+          if (
+            res?.data?.data?.status === "Accept"
+            // &&
+            // res?.data?.data?.type === "Chat"
+          ) {
+            swal("Request Accepted", "Wait Till Astro Joins Videocall");
+            clearInterval(interval);
+            history.push("/userVideoCall/${userId}");
+
+            // axiosConfig
+            //   .get(`/admin/dltNotificattion/${res.data.data?._id}`)
+            //   .then((res) => {
+            //     console.log("notification deleted", res);
+            //   })
+            //   .catch((err) => {
+            //     console.log(err);
+            //   });
+          }
+        })
+        .catch((err) => {
+          // console.log(err);
+        });
+    }, 5000);
+  };
+
   useEffect(() => {
     if (localStorage.getItem("user_id")) {
-      fetchOrder();
+      handlegetAcceptAstro();
     }
   }, []);
 
@@ -54,15 +93,19 @@ const Waitingpage = ({ location, args }) => {
 
       <LayoutOne headerTop="visible">
         <Breadcrumb />
-        <div className="d-flex justify-content-center align-item-center">
-          <h3>Wait Till Astrologer Accept Your Request...</h3>
-        </div>
+        <section style={{ padding: "180px 0px" }}>
+          <Container>
+            <div className="d-flex justify-content-center align-item-center">
+              <h3>Wait Till Astrologer Accept Your Request...</h3>
+            </div>
+          </Container>
+        </section>
       </LayoutOne>
     </Fragment>
   );
 };
 
-Waitingpage.propTypes = {
+WaitingPageVideo.propTypes = {
   addToCart: PropTypes.func,
   cartItems: PropTypes.array,
   currency: PropTypes.object,
@@ -97,4 +140,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Waitingpage);
+export default connect(mapStateToProps, mapDispatchToProps)(WaitingPageVideo);

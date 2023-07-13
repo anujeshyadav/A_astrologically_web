@@ -104,7 +104,8 @@ class UserRequestForm extends React.Component {
       .post(`/user/addCallWallet`, payload)
       .then((res) => {
         if (res.data.status === true) {
-          this.props.history.push(`/userVideoCall/${userId}`);
+          this.props.history.push(`/waitingpagevideo`);
+          // this.props.history.push(`/userVideoCall/${userId}`);
           // this.props.history.push(`/waitingpagevideo`);
         } else swal("Not Having Enough Balance");
       })

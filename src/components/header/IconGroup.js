@@ -49,7 +49,7 @@ const IconGroup = ({
     setInterval(() => {
       const Balance = sessionStorage.getItem("userBalance");
       const userdata = localStorage.getItem("userData");
-      setCustomer(JSON.parse(userdata));
+      // setCustomer(JSON.parse(userdata));
       setuserBalance(Balance);
     }, 4000);
   };
@@ -99,7 +99,7 @@ const IconGroup = ({
   useEffect(() => {
     let data = localStorage.getItem("token");
     setToken(data);
-    // fetchCustomer();
+    fetchCustomer();
   }, [customer]);
 
   return (

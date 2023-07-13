@@ -147,7 +147,7 @@ class AllAstrologerList extends React.Component {
   };
 
   handlestartInterval = () => {
-    setInterval(() => {
+    const handleAllastro = setInterval(() => {
       Fetchuserdetail();
       axiosConfig
         .get("/admin/allAstro")
@@ -159,10 +159,11 @@ class AllAstrologerList extends React.Component {
         .catch((error) => {
           console.log(error);
         });
-    }, 45000);
+    }, 30000);
   };
 
   componentDidMount = () => {
+    // clearInterval(interval);
     axiosConfig
       .get("/admin/allAstro")
       .then((response) => {
@@ -344,6 +345,12 @@ class AllAstrologerList extends React.Component {
       });
   };
 
+  Detailpage = (e, id) => {
+    e.preventDefault();
+
+    // clearInterval(handleAllastro);
+    this.props.history.push(`/astrologerdetail/${id}`);
+  };
   render() {
     const { astrologerList } = this.state;
 
@@ -521,12 +528,16 @@ class AllAstrologerList extends React.Component {
                                 <div className="frontside">
                                   <div className="card">
                                     <div className="card-body text-center">
-                                      <p>
+                                      <p
+                                        onClick={(e) =>
+                                          this.Detailpage(e, astrologer._id)
+                                        }
+                                      >
                                         <Link
-                                          to={
-                                            "/astrologerdetail/" +
-                                            astrologer._id
-                                          }
+                                        // to={
+                                        //   "/astrologerdetail/" +
+                                        //   astrologer._id
+                                        // }
                                         >
                                           <img src={astrologer?.img} alt="" />
                                         </Link>
