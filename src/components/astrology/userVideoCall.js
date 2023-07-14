@@ -188,6 +188,7 @@ class userVideoCall extends React.Component {
       if (user) {
         sessionStorage.setItem("typeofcall", "Videocall");
         this.handlePause();
+        clearInterval(this.apicall.current);
         swal("Astro leave the Videocall");
         let userid = localStorage.getItem("user_id");
         const astroId = localStorage.getItem("astroId");
@@ -209,6 +210,7 @@ class userVideoCall extends React.Component {
     EndCall: () => {
       this.setState({ setVideoCall: false });
       this.handlePause();
+      clearInterval(this.apicall.current);
       sessionStorage.setItem("typeofcall", "Videocall");
       let userid = localStorage.getItem("user_id");
 

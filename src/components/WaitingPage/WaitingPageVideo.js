@@ -18,6 +18,7 @@ import axiosConfig from "../../axiosConfig";
 import { Button, Col, Container, Row } from "reactstrap";
 import { Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import { useHistory } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 import swal from "sweetalert";
 
@@ -28,7 +29,7 @@ const WaitingPageVideo = ({ location, args }) => {
   const [Refund, setRefund] = useState({});
 
   const history = useHistory();
-
+  const mylocation = useLocation();
   const toggle = () => setModal(!modal);
   const fetchOrder = async () => {
     let userid = JSON.parse(localStorage.getItem("user_id"));
@@ -47,29 +48,32 @@ const WaitingPageVideo = ({ location, args }) => {
   const handlegetAcceptAstro = () => {
     const interval = setInterval(() => {
       let userid = JSON.parse(localStorage.getItem("user_id"));
-
+      console.log(mylocation.state?._id);
+      let id =
+        mylocation?.state?._id || sessionStorage.getItem("notificationdata");
+      console.log(id);
       axiosConfig
-        .get(`/user/getOnenotificationByastro/${userid}`)
+        .get(`/user/getOnenotificationByastro/${id}`)
         .then((res) => {
           debugger;
-          console.log("request accepted ", res.data.data);
+          console.log("request status ", res.data.data);
           console.log("notificationid", res.data.data);
           if (
             res?.data?.data?.status === "Accept" &&
             res?.data?.data?.type === "Video"
           ) {
             swal("Request Accepted", "Wait Till Astro Joins Videocall");
-            // clearInterval(interval);
-            history.push(`/userVideoCall/${userid}`);
+            clearInterval(interval);
+            history.push(`/userVideoCall/${res.data.data?._id}`);
 
-            // axiosConfig
-            //   .get(`/admin/dltNotificattion/${res.data.data?._id}`)
-            //   .then((res) => {
-            //     console.log("notification deleted", res);
-            //   })
-            //   .catch((err) => {
-            //     console.log(err);
-            //   });
+            axiosConfig
+              .get(`/admin/dltNotificattion/${res.data.data?._id}`)
+              .then((res) => {
+                console.log("notification deleted", res);
+              })
+              .catch((err) => {
+                console.log(err);
+              });
           }
         })
         .catch((err) => {

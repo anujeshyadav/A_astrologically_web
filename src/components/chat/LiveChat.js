@@ -149,6 +149,7 @@ class ChatApp extends React.Component {
         const data = {
           userid: userId,
           astroid: Astrodata?._id,
+          type: "VoiceCall",
         };
         axiosConfig
           .post(`/user/addCallWallet`, data)

@@ -89,31 +89,36 @@ class UserRequestForm extends React.Component {
     };
     axiosConfig
       .post(`/user/add_chat_intake`, obj)
-      .then((response) => {})
+      .then((response) => {
+        let payload = {
+          userid: userId,
+          astroid: astroId,
+          type: "Video",
+        };
+        axiosConfig
+          .post(`/user/addCallWallet`, payload)
+          .then((res) => {
+            if (res.data.status === true) {
+              debugger;
+              this.props.history.push({
+                pathname: "/waitingpagevideo",
+                state: res.data,
+              });
+              this.props.history.push(`/waitingpagevideo`);
+              // this.props.history.push(`/userVideoCall/${userId}`);
+              // this.props.history.push(`/waitingpagevideo`);
+            } else swal("Not Having Enough Balance");
+          })
+          .catch((err) => {
+            console.log(err.response.data.message);
+            if (err.response.data.message) {
+              alert("Low balance Recharge");
+            }
+          });
+      })
       .catch((error) => {
         swal("Error!", "error");
         console.log(error);
-      });
-
-    let payload = {
-      userid: userId,
-      astroid: astroId,
-      type: "Video",
-    };
-    axiosConfig
-      .post(`/user/addCallWallet`, payload)
-      .then((res) => {
-        if (res.data.status === true) {
-          this.props.history.push(`/waitingpagevideo`);
-          // this.props.history.push(`/userVideoCall/${userId}`);
-          // this.props.history.push(`/waitingpagevideo`);
-        } else swal("Not Having Enough Balance");
-      })
-      .catch((err) => {
-        console.log(err.response.data.message);
-        if (err.response.data.message) {
-          alert("Low balance Recharge");
-        }
       });
   };
 

@@ -1,10 +1,11 @@
 import PropTypes from "prop-types";
-import React, { Fragment, useState, useEffect } from "react";
+import React, { Fragment, useState, useEffect, useRef } from "react";
 
 import { Link } from "react-router-dom";
 
 import { BreadcrumbsItem } from "react-breadcrumbs-dynamic";
 import { connect } from "react-redux";
+import { useLocation } from "react-router-dom";
 
 import {
   addToWishlist,
@@ -18,16 +19,16 @@ import axiosConfig from "../../axiosConfig";
 import { Button, Col, Container, Row } from "reactstrap";
 import { Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import { useHistory } from "react-router-dom";
-
 import swal from "sweetalert";
 
 const Waitingpage = ({ location, args }) => {
+  const intervalRef = useRef();
   const { pathname } = location;
   const [order, setOrder] = useState([]);
   const [modal, setModal] = useState(false);
-  const [Refund, setRefund] = useState({});
 
   const history = useHistory();
+  const mylocation = useLocation();
 
   const toggle = () => setModal(!modal);
   const fetchOrder = async () => {
@@ -45,27 +46,30 @@ const Waitingpage = ({ location, args }) => {
   };
 
   const handlegetAcceptAstro = () => {
-    const interval = setInterval(() => {
-      let userid = JSON.parse(localStorage.getItem("user_id"));
-
+    intervalRef.current = setInterval(() => {
+      // let userid = JSON.parse(localStorage.getItem("user_id"));
+      console.log(mylocation.state?._id);
+      let id =
+        mylocation?.state?._id || sessionStorage.getItem("notificationdata");
+      console.log(id);
       axiosConfig
-        .get(`/user/getOnenotificationByastro/${userid}`)
+        .get(`/user/getOnenotificationByastro/${id}`)
         .then((res) => {
-          debugger;
-          console.log("request accepted ", res.data.data);
-          console.log("notificationid", res.data.data);
+          console.log("request for chat ", res.data.data);
+          console.log("notification", res.data.data);
           if (
             res?.data?.data?.status === "Accept" &&
             res?.data?.data?.type === "Chat"
           ) {
             swal("Astro is now Accepted Your Request");
-            clearInterval(interval);
+            clearInterval(intervalRef.current);
             history.push("/chatApp");
 
             axiosConfig
               .get(`/admin/dltNotificattion/${res.data.data?._id}`)
               .then((res) => {
                 console.log("notification deleted", res);
+                // clearInterval(intervalRef.current);
               })
               .catch((err) => {
                 console.log(err);

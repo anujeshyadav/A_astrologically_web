@@ -97,10 +97,15 @@ class UserRequestForm extends React.Component {
           axiosConfig
             .post(`/user/addCallWallet`, data)
             .then((res) => {
-              console.log(res);
+              console.log(res.data);
+              sessionStorage.setItem("notificationdata", res.data?._id);
               if (res.data.status === true) {
                 // this.props.history.push("/chatApp");
-                this.props.history.push("/waitingpagechat");
+                this.props.history.push({
+                  pathname: "/waitingpagechat",
+                  state: res.data,
+                });
+                // this.props.history.push("/waitingpagechat");
               } else swal("Not having Enough Balance");
             })
             .catch((err) => {

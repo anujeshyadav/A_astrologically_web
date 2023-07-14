@@ -204,43 +204,45 @@ class AllAstrologerList extends React.Component {
     localStorage.setItem("astroname", astrodata?.fullname);
 
     if (userId !== "" && userId !== null) {
-      const data = {
-        userid: userId,
-        astroid: astroid,
-      };
+      // const data = {
+      //   userid: userId,
+      //   astroid: astroid,
+      // };
 
       if (astrodata?.waiting_tym === 0 && astrodata?.callingStatus !== "Busy") {
-        axiosConfig
-          .post(`/user/addCallWallet`, data)
-          .then((response) => {
-            console.log("@@@callingmode", response.data);
+        this.props.history.push("/UserRequestFormCall");
 
-            if (response.data?.msg === "success") {
-              this.props.history.push("/UserRequestFormCall");
-            } else
-              swal(
-                "Recharge Now",
-                "You Donot have Enough balance to Make This Call",
-                {
-                  buttons: {
-                    cancel: "Recharge Now",
-                    catch: { text: "Cancel ", value: "catch" },
-                  },
-                }
-              ).then((value) => {
-                switch (value) {
-                  case "catch":
-                    // swal("Sure Want to cancel it");
-                    break;
-                  default:
-                    this.props.history.push("/walletmoney");
-                }
-              });
-          })
-          .catch((error) => {
-            console.log(error);
-            // swal('Error!', 'Invalid!', 'error')
-          });
+        // axiosConfig
+        //   .post(`/user/addCallWallet`, data)
+        //   .then((response) => {
+        //     console.log("@@@callingmode", response.data);
+
+        //     if (response.data?.msg === "success") {
+        //       this.props.history.push("/UserRequestFormCall");
+        //     } else
+        //       swal(
+        //         "Recharge Now",
+        //         "You Donot have Enough balance to Make This Call",
+        //         {
+        //           buttons: {
+        //             cancel: "Recharge Now",
+        //             catch: { text: "Cancel ", value: "catch" },
+        //           },
+        //         }
+        //       ).then((value) => {
+        //         switch (value) {
+        //           case "catch":
+        //             // swal("Sure Want to cancel it");
+        //             break;
+        //           default:
+        //             this.props.history.push("/walletmoney");
+        //         }
+        //       });
+        //   })
+        //   .catch((error) => {
+        //     console.log(error);
+        //     // swal('Error!', 'Invalid!', 'error')
+        //   });
       } else {
         swal(
           `Astrologer is Busy for ${this.state.astroData?.waiting_tym} Min`,
