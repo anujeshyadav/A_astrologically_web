@@ -25,6 +25,7 @@ const Waitingpage = ({ location, args }) => {
   const intervalRef = useRef();
   const { pathname } = location;
   const [order, setOrder] = useState([]);
+  const [Refund, setRefund] = useState({});
   const [modal, setModal] = useState(false);
 
   const history = useHistory();
