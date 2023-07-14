@@ -15,14 +15,16 @@ import { addToCart } from "../../redux/actions/cartActions";
 import LayoutOne from "../../layouts/LayoutOne";
 import Breadcrumb from "../../wrappers/breadcrumb/Breadcrumb";
 import axiosConfig from "../../axiosConfig";
-import { Button, Col, Row } from "reactstrap";
+import { Button, Col, Container, Row } from "reactstrap";
 import { Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
+import swal from "sweetalert";
 
 const MyOrder = ({ location, args }) => {
   const { pathname } = location;
   const [order, setOrder] = useState([]);
   const [modal, setModal] = useState(false);
   const [Refund, setRefund] = useState({});
+  const [refundreason, setRefungReason] = useState("");
 
   const toggle = () => setModal(!modal);
   const fetchOrder = async () => {
@@ -32,10 +34,34 @@ const MyOrder = ({ location, args }) => {
     setOrder(order);
     console.log(order);
   };
+  const hanldesubmitRefund = (e) => {
+    e.preventDefault();
+
+    if (refundreason.length) {
+      let payload = {
+        userid: Refund?.data?.userid?._id,
+        productid: Refund?.data?.product?.product?._id,
+        reason: refundreason,
+        status: "Pending",
+      };
+
+      axiosConfig
+        .post(`/user/applyforRefund`, payload)
+        .then((res) => {
+          console.log(res.data.data);
+          swal("Successful", "Applied for Refund");
+        })
+        .catch((err) => {
+          console.log(err.response?.data.message == "");
+          if (err.response?.data.message == "already exists") {
+            swal("Already Applied for Refund");
+          }
+        });
+    }
+  };
   const hanleopenmodal = (e, data) => {
     e.preventDefault();
     setRefund(data);
-    console.log(data);
     toggle();
   };
 
@@ -49,7 +75,7 @@ const MyOrder = ({ location, args }) => {
     <Fragment>
       <BreadcrumbsItem to={process.env.PUBLIC_URL + "/"}>Home</BreadcrumbsItem>
       <BreadcrumbsItem to={process.env.PUBLIC_URL + pathname}>
-        My Refund
+        Apply Refund
       </BreadcrumbsItem>
 
       <LayoutOne headerTop="visible">
@@ -57,99 +83,209 @@ const MyOrder = ({ location, args }) => {
         <div className="cart-main-area pt-90 pb-100">
           <div className="container">
             {order && order.length >= 1 ? (
-              <Fragment>
-                <h3 className="cart-page-title">Your Ordered Items</h3>
-                <div className="row">
-                  <div className="col-12">
-                    <div className="table-content table-responsive cart-table-content">
-                      <table>
-                        <thead>
-                          <tr>
-                            <th>ORDER ID</th>
-                            <th>Image</th>
-                            <th>Product Name</th>
-                            <th>Purchasing Date</th>
+              <>
+                <Fragment>
+                  <h3 className="cart-page-title">Your Ordered Items</h3>
+                  <div className="row">
+                    <div className="col-12">
+                      <div className="table-content table-responsive cart-table-content">
+                        <table>
+                          <thead>
+                            <tr>
+                              <th>ORDER ID</th>
+                              <th>Image</th>
+                              <th>Product Name</th>
+                              <th>Purchasing Date</th>
 
-                            <th>AMOUNT</th>
+                              <th>AMOUNT</th>
 
-                            <th>GST</th>
-                            <th>Total Amount</th>
-                            <th>Status</th>
-                            <th>Refund</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {order?.map((orders, key) => {
-                            return (
-                              <tr key={key}>
-                                <td className="product-price-cart">
-                                  <span className="amount">
-                                    {orders?.orderId}
-                                  </span>
-                                </td>
-                                <td className="product-thumbnail">
-                                  <Link to="#">
-                                    <img
-                                      width="80px"
-                                      height="80px"
-                                      className="img-fluid"
-                                      src={orders?.product?.product?.image[0]}
-                                      alt=""
-                                    />
-                                  </Link>
-                                </td>
+                              <th>GST</th>
+                              <th>Total Amount</th>
+                              <th>Status</th>
+                              <th>Refund</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {order?.map((orders, key) => {
+                              return (
+                                <tr key={key}>
+                                  <td className="product-price-cart">
+                                    <span className="amount">
+                                      {orders?.orderId}
+                                    </span>
+                                  </td>
+                                  <td className="product-thumbnail">
+                                    <Link to="#">
+                                      <img
+                                        width="80px"
+                                        height="80px"
+                                        className="img-fluid"
+                                        src={orders?.product?.product?.image[0]}
+                                        alt=""
+                                      />
+                                    </Link>
+                                  </td>
 
-                                <td className="product-name text-center">
-                                  <Link>
-                                    {orders?.product?.product?.productname}
-                                  </Link>
-                                  <br />
-                                  <p>by:-{orders?.astroid?.fullname}</p>
-                                  {orders?.product?.product?.qsCount ? (
-                                    <>
-                                      Question Count:{" "}
-                                      {orders?.product?.product?.qsCount}
-                                    </>
-                                  ) : null}
-                                </td>
+                                  <td className="product-name text-center">
+                                    <Link>
+                                      {orders?.product?.product?.productname}
+                                    </Link>
+                                    <br />
+                                    <p>by:-{orders?.astroid?.fullname}</p>
+                                    {orders?.product?.product?.qsCount ? (
+                                      <>
+                                        Question Count:{" "}
+                                        {orders?.product?.product?.qsCount}
+                                      </>
+                                    ) : null}
+                                  </td>
 
-                                <td className="product-price-cart">
-                                  <span className="amount"></span>
-                                  {orders?.createdAt?.split("T")[0]}
-                                </td>
-                                <td className="product-price-cart">
-                                  <span className="amount"></span>
-                                  {orders?.cartId?.productid?.price}
-                                </td>
-                                <td className="product-price-cart">
-                                  <span className="amount"></span>
-                                  {orders?.cartId.gst}
-                                </td>
-                                <td className="product-price-cart">
-                                  <span className="amount"></span>
-                                  {orders?.cartId?.total_amt}
-                                </td>
-                                <td className="product-price-cart">
-                                  <span className="amount"></span>
-                                  {orders?.status}
-                                </td>
-                                <td className="product-price-cart">
-                                  <Button
-                                    onClick={(e) => hanleopenmodal(e, orders)}
-                                    color="primary"
-                                  >
-                                    Apply for Refund
-                                  </Button>
-                                </td>
-                              </tr>
-                            );
-                          })}
-                        </tbody>
-                      </table>
+                                  <td className="product-price-cart">
+                                    <span className="amount"></span>
+                                    {orders?.createdAt?.split("T")[0]}
+                                  </td>
+                                  <td className="product-price-cart">
+                                    <span className="amount"></span>
+                                    {orders?.cartId?.productid?.price}
+                                  </td>
+                                  <td className="product-price-cart">
+                                    <span className="amount"></span>
+                                    {orders?.cartId.gst}
+                                  </td>
+                                  <td className="product-price-cart">
+                                    <span className="amount"></span>
+                                    {orders?.cartId?.total_amt}
+                                  </td>
+                                  <td className="product-price-cart">
+                                    <span className="amount"></span>
+                                    {orders?.status}
+                                  </td>
+                                  <td className="product-price-cart">
+                                    <Button
+                                      onClick={(e) => hanleopenmodal(e, orders)}
+                                      color="primary"
+                                    >
+                                      Apply for Refund
+                                    </Button>
+                                  </td>
+                                </tr>
+                              );
+                            })}
+                          </tbody>
+                        </table>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </Fragment>
+                </Fragment>
+                <section>
+                  <Container>
+                    <Fragment>
+                      <div className="d-flex justify-content-center">
+                        <h2 className="cart-page-title mb-4">
+                          Your Refund Applied
+                        </h2>
+                      </div>
+                      <div className="row">
+                        <div className="col-12">
+                          <div className="table-content table-responsive cart-table-content">
+                            <table>
+                              <thead>
+                                <tr>
+                                  <th>ORDER ID</th>
+                                  <th>Image</th>
+                                  <th>Product Name</th>
+                                  <th>Purchasing Date</th>
+
+                                  <th>AMOUNT</th>
+
+                                  <th>GST</th>
+                                  <th>Total Amount</th>
+                                  <th>Status</th>
+                                  <th>Refund</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {order?.map((orders, key) => {
+                                  return (
+                                    <tr key={key}>
+                                      <td className="product-price-cart">
+                                        <span className="amount">
+                                          {orders?.orderId}
+                                        </span>
+                                      </td>
+                                      <td className="product-thumbnail">
+                                        <Link to="#">
+                                          <img
+                                            width="80px"
+                                            height="80px"
+                                            className="img-fluid"
+                                            src={
+                                              orders?.product?.product?.image[0]
+                                            }
+                                            alt=""
+                                          />
+                                        </Link>
+                                      </td>
+
+                                      <td className="product-name text-center">
+                                        <Link>
+                                          {
+                                            orders?.product?.product
+                                              ?.productname
+                                          }
+                                        </Link>
+                                        <br />
+                                        <p>by:-{orders?.astroid?.fullname}</p>
+                                        {orders?.product?.product?.qsCount ? (
+                                          <>
+                                            Question Count:{" "}
+                                            {orders?.product?.product?.qsCount}
+                                          </>
+                                        ) : null}
+                                      </td>
+
+                                      <td className="product-price-cart">
+                                        <span className="amount"></span>
+                                        {orders?.createdAt?.split("T")[0]}
+                                      </td>
+                                      <td className="product-price-cart">
+                                        <span className="amount"></span>
+                                        {orders?.cartId?.productid?.price}
+                                      </td>
+                                      <td className="product-price-cart">
+                                        <span className="amount"></span>
+                                        {orders?.cartId.gst}
+                                      </td>
+                                      <td className="product-price-cart">
+                                        <span className="amount"></span>
+                                        {orders?.cartId?.total_amt}
+                                      </td>
+                                      <td className="product-price-cart">
+                                        <span className="amount"></span>
+                                        {orders?.status}
+                                      </td>
+                                      <td className="product-price-cart">
+                                        <Button
+                                          onClick={(e) =>
+                                            hanleopenmodal(e, orders)
+                                          }
+                                          color="primary"
+                                        >
+                                          Apply for Refund
+                                        </Button>
+                                      </td>
+                                    </tr>
+                                  );
+                                })}
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      </div>
+                    </Fragment>
+                  </Container>
+                </section>
+              </>
             ) : (
               <div className="row">
                 <div className="col-lg-12">
@@ -199,29 +335,36 @@ const MyOrder = ({ location, args }) => {
                   />
                 </Col>
               </Row>
+              <form onSubmit={hanldesubmitRefund}>
+                <Row>
+                  <Col>
+                    <p className="">
+                      {" "}
+                      <b>Reason for Return</b>
+                    </p>
 
-              <Row>
-                <Col>
-                  <p className="">
-                    {" "}
-                    <b>Reason for Return</b>
-                  </p>
-
-                  <textarea
-                    rows="6"
-                    cols="50"
-                    class="form-control"
-                    aria-label="With textarea"
-                  ></textarea>
-                </Col>
-              </Row>
-              <Row>
-                <Col>
-                  <div className="d-flex justify-content-center py-2">
-                    <Button color="primary">Apply for Refund</Button>
-                  </div>
-                </Col>
-              </Row>
+                    <textarea
+                      required
+                      value={refundreason}
+                      onChange={(e) => setRefungReason(e.target.value)}
+                      rows="6"
+                      cols="50"
+                      class="form-control"
+                      aria-label="With textarea"
+                    ></textarea>
+                    <p className="mt-2">{refundreason.length} Charactors</p>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col>
+                    <div className="d-flex justify-content-center py-2">
+                      <Button type="submit" color="primary">
+                        Apply for Refund
+                      </Button>
+                    </div>
+                  </Col>
+                </Row>
+              </form>
             </ModalBody>
           </Modal>
         </div>

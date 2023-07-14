@@ -180,7 +180,8 @@ export default class LoginRegister extends Component {
           password: this.state.L_Password,
         })
         .then((response) => {
-          //  console.log("userLogin", response.data);
+          // console.log("userLogin", response.data?.data.msg);
+
           localStorage.setItem(
             "userData",
             JSON.stringify(response?.data?.user)
@@ -198,7 +199,10 @@ export default class LoginRegister extends Component {
         })
         .catch((error) => {
           console.log(error.response);
-          if (error.response?.data.msg === "User doesn't Exist") {
+          if (error.response?.data.msg === "Incorrect Password") {
+            swal("Error!", "Incorrect Pawword ");
+          }
+          if (error.response?.data?.msg === "User Doesnot Exist") {
             swal("Error!", "User doesn't Exist", "error");
             this.setState({ loginText: "Login" });
           }
