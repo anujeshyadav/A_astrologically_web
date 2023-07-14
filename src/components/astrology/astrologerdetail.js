@@ -167,6 +167,7 @@ class AstrologerDetail extends React.Component {
       const data = {
         userid: userId,
         astroid: id,
+        type: "Chat",
       };
       if (
         this.state.astroData?.waiting_tym === 0 &&
@@ -251,6 +252,7 @@ class AstrologerDetail extends React.Component {
       const data = {
         userid: userId,
         astroid: id,
+        type: "Call",
       };
 
       if (
@@ -361,7 +363,7 @@ class AstrologerDetail extends React.Component {
       });
   };
 
-  handleBalacecheck = () => {
+  HandleVideocall = () => {
     let userId = JSON.parse(localStorage.getItem("user_id"));
     let { id } = this.props.match.params;
 
@@ -369,6 +371,7 @@ class AstrologerDetail extends React.Component {
       const data = {
         userid: userId,
         astroid: id,
+        type: "Video",
       };
       // if (this.state.astroData.waiting_queue === 0) {
       if (
@@ -689,7 +692,7 @@ class AstrologerDetail extends React.Component {
                                 : false
                             }
                             className="btn-as st"
-                            onClick={() => this.handleBalacecheck()}
+                            onClick={() => this.HandleVideocall()}
                           >
                             <i
                               class="fa fa-video-camera"

@@ -54,7 +54,7 @@ class WalletMoney extends React.Component {
     axiosConfig
       .get(`/user/viewoneuser/${user_id}`)
       .then((response) => {
-        console.log("sjdfjdfg", response.data.data);
+        console.log("walletmoney", response.data.data);
         this.setState({
           amount: response.data.data?.amount,
         });

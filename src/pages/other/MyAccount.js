@@ -41,7 +41,7 @@ export default class MyAccount extends Component {
     axiosConfig
       .get(`/user/viewoneuser/${user_id}`)
       .then((response) => {
-        console.log(response.data.data);
+        console.log("myaccount", response.data.data);
         this.setState({
           fullname: response.data.data.fullname,
           email: response.data.data.email,
@@ -64,7 +64,7 @@ export default class MyAccount extends Component {
   };
   componentDidMount() {
     // let { id } = this.props.match.params;
-    this.handlegetUser();
+    // this.handlegetUser();
   }
   changeHandler1 = (e) => {
     this.setState({ status: e.target.value });

@@ -51,12 +51,12 @@ const Waitingpage = ({ location, args }) => {
       axiosConfig
         .get(`/user/getOnenotificationByastro/${userid}`)
         .then((res) => {
+          debugger;
           console.log("request accepted ", res.data.data);
           console.log("notificationid", res.data.data);
           if (
-            res?.data?.data?.status === "Accept"
-            // &&
-            // res?.data?.data?.type === "Chat"
+            res?.data?.data?.status === "Accept" &&
+            res?.data?.data?.type === "Chat"
           ) {
             swal("Astro is now Accepted Your Request");
             clearInterval(interval);

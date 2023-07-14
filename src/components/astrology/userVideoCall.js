@@ -143,6 +143,7 @@ class userVideoCall extends React.Component {
     axiosConfig
       .get(`/user/viewoneuser/${userid}`)
       .then((response) => {
+        console.log("videocal", response);
         this.setState({ mobile: response.data.data.mobile });
         this.setState({ userData: response.data.data });
       })
@@ -248,7 +249,11 @@ class userVideoCall extends React.Component {
                     <>
                       <Row>
                         <Col className="d-flex justify-content-center"></Col>
-                        <p>{this.formatTime(this.state.setTimer)}</p>
+                        <p>
+                          {this.state.Loader ? null : (
+                            <>{this.formatTime(this.state.setTimer)}</>
+                          )}
+                        </p>
                       </Row>
                       <div
                         style={{

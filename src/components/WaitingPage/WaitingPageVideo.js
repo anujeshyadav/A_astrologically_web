@@ -51,16 +51,16 @@ const WaitingPageVideo = ({ location, args }) => {
       axiosConfig
         .get(`/user/getOnenotificationByastro/${userid}`)
         .then((res) => {
+          debugger;
           console.log("request accepted ", res.data.data);
           console.log("notificationid", res.data.data);
           if (
-            res?.data?.data?.status === "Accept"
-            // &&
-            // res?.data?.data?.type === "Chat"
+            res?.data?.data?.status === "Accept" &&
+            res?.data?.data?.type === "Video"
           ) {
             swal("Request Accepted", "Wait Till Astro Joins Videocall");
-            clearInterval(interval);
-            history.push("/userVideoCall/${userId}");
+            // clearInterval(interval);
+            history.push(`/userVideoCall/${userid}`);
 
             // axiosConfig
             //   .get(`/admin/dltNotificattion/${res.data.data?._id}`)

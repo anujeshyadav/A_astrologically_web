@@ -89,6 +89,7 @@ const IconGroup = ({
     if (user_id) {
       await ViewOneUser(user_id)
         .then((res) => {
+          // console.log("Icongroup", res);
           setCustomer(res.data);
         })
         .catch((err) => {
@@ -100,7 +101,7 @@ const IconGroup = ({
     let data = localStorage.getItem("token");
     setToken(data);
     fetchCustomer();
-  }, [customer]);
+  }, []);
 
   return (
     <div
@@ -330,6 +331,7 @@ export const Fetchuserdetail = async () => {
     await axiosConfig
       .get(`/user/viewoneuser/${user_id}`)
       .then((response) => {
+        console.log("icongroug", response);
         sessionStorage.setItem("userBalance", response?.data?.data?.amount);
         console.log(response.data.data.amount);
       })

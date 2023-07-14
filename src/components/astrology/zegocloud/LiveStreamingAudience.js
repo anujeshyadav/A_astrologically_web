@@ -56,11 +56,13 @@ class LiveStreamingAudience extends React.Component {
   callbacks = {
     EndCall: () => this.setState({ setVideoCall: false }),
   };
+
   componentDidMount() {
     let userId = JSON.parse(localStorage.getItem("user_id"));
     axiosConfig
       .get(`/user/viewoneuser/${userId}`)
       .then((response) => {
+        console.log("livestreaig", response);
         this.setState({ mobile: response.data.data.mobile });
       })
       .catch((error) => {
