@@ -34,7 +34,7 @@ const MyOrder = ({ location }) => {
     axiosConfig
       .get(`/admin/dltBookedPuja/${data?._id}`)
       .then((res) => {
-        fetchOrder;
+        fetchOrder();
         console.log(res);
       })
       .catch((err) => {

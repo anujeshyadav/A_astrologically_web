@@ -35,7 +35,7 @@ const MyOrder = ({ location, args }) => {
     setOrder(order);
 
     await axiosConfig
-      .get(`/user/userRefundList/63a1baa3ae6e54f1e2a002cc`)
+      .get(`/user/userRefundList/${userid}`)
       .then((res) => {
         console.log(res.data.data);
         setGotRefund(res.data.data);
@@ -274,11 +274,11 @@ const MyOrder = ({ location, args }) => {
                                       </td>
                                       <td className="product-price-cart">
                                         <span className="amount"></span>
-                                        {orders?.cartId?.gst}
+                                        {orders?.orderid?.cartId?.gst}
                                       </td>
                                       <td className="product-price-cart">
                                         <span className="amount"></span>
-                                        {orders?.cartId?.total_amt}
+                                        {orders?.orderid?.cartId?.total_amt}
                                       </td>
                                       <td className="product-price-cart">
                                         <span className="amount"></span>
