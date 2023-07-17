@@ -1,4 +1,4 @@
-import { Container, Row, Col, Button, Input } from "reactstrap";
+import { Container, Row, Col, Button, Input, Toast } from "reactstrap";
 import LayoutOne from "../../../layouts/LayoutOne";
 import React, { useEffect, useState } from "react";
 import AgoraUIKit from "agora-react-uikit";
@@ -9,6 +9,7 @@ import LiveChat from "../../../components/chat/LiveChat";
 // import "../../../../src/assets/scss/style.scss";
 import "../../../../src/assets/scss/LiveStream.scss";
 import { useLocation } from "react-router-dom";
+import swal from "sweetalert";
 
 function LiveVideonew() {
   const [Videocall, setVideocall] = useState(true);
@@ -30,13 +31,19 @@ function LiveVideonew() {
   };
 
   const callbacks = {
+    ["user-left"]: (user) => {
+      setVideocall(false);
+      sessionStorage.setItem("typeofcall", "LiveStreaming");
+      history.push("/astrorating");
+      Toast("Astro Leave the Live Streaming");
+    },
     EndCall: () => {
       setVideocall(false);
+      sessionStorage.setItem("typeofcall", "LiveStreaming");
 
       history.push({
         pathname: "/astrorating",
       });
-      sessionStorage.setItem("typeofcall", "LiveStreaming");
     },
   };
   useEffect(() => {

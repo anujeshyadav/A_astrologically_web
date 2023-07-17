@@ -18,7 +18,12 @@ const MyOrder = ({ location }) => {
   const [order, setOrder] = useState([]);
   const fetchOrder = async () => {
     let userid = JSON.parse(localStorage.getItem("user_id"));
-    const { data } = await axiosConfig.get(`/user/myOrders/${userid}`);
+    const { data } = await axiosConfig.get(
+      `/user/userBookedPujalist/632da83471b4d7fd47492f03`
+    );
+    // const { data } = await axiosConfig.get(
+    //   `/user/userBookedPujalist/${userid}`
+    // );
     const order = data.data;
     setOrder(order);
     console.log(order);
@@ -58,8 +63,8 @@ const MyOrder = ({ location }) => {
 
                             <th>AMOUNT</th>
 
-                            <th>GST</th>
-                            <th>Total Amount</th>
+                            <th>Slot</th>
+                            <th>Address</th>
                             <th>Status</th>
                           </tr>
                         </thead>
@@ -78,7 +83,7 @@ const MyOrder = ({ location }) => {
                                       width="80px"
                                       height="80px"
                                       className="img-fluid"
-                                      src={orders?.product?.product?.image[0]}
+                                      src={orders?.pujaId?.poojaimg}
                                       alt=""
                                     />
                                   </Link>
@@ -86,16 +91,16 @@ const MyOrder = ({ location }) => {
 
                                 <td className="product-name text-center">
                                   <Link>
-                                    {orders?.product?.product?.productname}
+                                    {orders?.pujaId?.pooja_type?.pooja_name}
                                   </Link>
                                   <br />
-                                  <p>by:-{orders?.astroid?.fullname}</p>
-                                  {orders?.product?.product?.qsCount ? (
+                                  {/* <p>by:-{orders?.astroid?.fullname}</p> */}
+                                  {/* {orders?.product?.product?.qsCount ? (
                                     <>
                                       Question Count:{" "}
                                       {orders?.product?.product?.qsCount}
                                     </>
-                                  ) : null}
+                                  ) : null} */}
                                 </td>
 
                                 <td className="product-price-cart">
@@ -109,15 +114,15 @@ const MyOrder = ({ location }) => {
                                 </td>
                                 <td className="product-price-cart">
                                   <span className="amount"></span>
-                                  {orders?.cartId?.productid?.price}
+                                  {orders?.pujaId?.pooja_price}
                                 </td>
                                 <td className="product-price-cart">
                                   <span className="amount"></span>
-                                  {orders?.cartId.gst}
+                                  {orders?.slots}
                                 </td>
                                 <td className="product-price-cart">
                                   <span className="amount"></span>
-                                  {orders?.cartId?.total_amt}
+                                  {orders?.address}
                                 </td>
                                 <td className="product-price-cart">
                                   <span className="amount"></span>

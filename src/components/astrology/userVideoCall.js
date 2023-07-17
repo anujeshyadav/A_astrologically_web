@@ -250,12 +250,13 @@ class userVideoCall extends React.Component {
                   {this.state.setVideoCall === true ? (
                     <>
                       <Row>
-                        <Col className="d-flex justify-content-center"></Col>
-                        <p>
-                          {this.state.Loader ? null : (
-                            <>{this.formatTime(this.state.setTimer)}</>
-                          )}
-                        </p>
+                        <Col className="d-flex justify-content-center">
+                          <p>
+                            {this.state.Loader ? null : (
+                              <>{this.formatTime(this.state.setTimer)}</>
+                            )}
+                          </p>
+                        </Col>
                       </Row>
                       <div
                         style={{
