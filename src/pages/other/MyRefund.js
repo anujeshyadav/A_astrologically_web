@@ -190,19 +190,19 @@ const MyOrder = ({ location, args }) => {
                 <section>
                   <Container>
                     <Fragment>
-                      {GotRefund && (
+                      {GotRefund.length ? (
                         <div className="d-flex justify-content-center">
                           <h2 className="cart-page-title mb-4">
                             Your Refund Applied
                           </h2>
                         </div>
-                      )}
+                      ) : null}
 
                       <div className="row">
                         <div className="col-12">
                           <div className="table-content table-responsive cart-table-content">
                             <table>
-                              {GotRefund && (
+                              {GotRefund.length ? (
                                 <thead>
                                   <tr>
                                     <th>ORDER ID</th>
@@ -218,79 +218,83 @@ const MyOrder = ({ location, args }) => {
                                     <th>Reason for Refund</th>
                                   </tr>
                                 </thead>
-                              )}
+                              ) : null}
+                              {GotRefund?.length ? (
+                                <tbody>
+                                  {GotRefund?.map((orders, key) => {
+                                    return (
+                                      <tr key={key}>
+                                        <td className="product-price-cart">
+                                          <span className="amount">
+                                            {orders?.orderid?.orderId}
+                                          </span>
+                                        </td>
+                                        <td className="product-thumbnail">
+                                          <Link to="#">
+                                            <img
+                                              width="80px"
+                                              height="80px"
+                                              className="img-fluid"
+                                              src={
+                                                orders?.orderid?.product
+                                                  ?.product?.image[0]
+                                              }
+                                              alt=""
+                                            />
+                                          </Link>
+                                        </td>
 
-                              <tbody>
-                                {GotRefund?.map((orders, key) => {
-                                  return (
-                                    <tr key={key}>
-                                      <td className="product-price-cart">
-                                        <span className="amount">
-                                          {orders?.orderid?.orderId}
-                                        </span>
-                                      </td>
-                                      <td className="product-thumbnail">
-                                        <Link to="#">
-                                          <img
-                                            width="80px"
-                                            height="80px"
-                                            className="img-fluid"
-                                            src={
+                                        <td className="product-name text-center">
+                                          <Link>
+                                            {
                                               orders?.orderid?.product?.product
-                                                ?.image[0]
+                                                ?.productname
                                             }
-                                            alt=""
-                                          />
-                                        </Link>
-                                      </td>
+                                          </Link>
+                                          <br />
+                                          <p>
+                                            by:-
+                                            {orders?.orderid?.astroid?.fullname}
+                                          </p>
+                                          {orders?.product?.product?.qsCount ? (
+                                            <>
+                                              Question Count:{" "}
+                                              {
+                                                orders?.product?.product
+                                                  ?.qsCount
+                                              }
+                                            </>
+                                          ) : null}
+                                        </td>
 
-                                      <td className="product-name text-center">
-                                        <Link>
-                                          {
-                                            orders?.orderid?.product?.product
-                                              ?.productname
-                                          }
-                                        </Link>
-                                        <br />
-                                        <p>
-                                          by:-
-                                          {orders?.orderid?.astroid?.fullname}
-                                        </p>
-                                        {orders?.product?.product?.qsCount ? (
-                                          <>
-                                            Question Count:{" "}
-                                            {orders?.product?.product?.qsCount}
-                                          </>
-                                        ) : null}
-                                      </td>
-
-                                      <td className="product-price-cart">
-                                        <span className="amount"></span>
-                                        {orders?.createdAt?.split("T")[0]}
-                                      </td>
-                                      <td className="product-price-cart">
-                                        <span className="amount"></span>
-                                        {orders?.orderid?.product?.price}
-                                      </td>
-                                      <td className="product-price-cart">
-                                        <span className="amount"></span>
-                                        {orders?.orderid?.cartId?.gst}
-                                      </td>
-                                      <td className="product-price-cart">
-                                        <span className="amount"></span>
-                                        {orders?.orderid?.cartId?.total_amt}
-                                      </td>
-                                      <td className="product-price-cart">
-                                        <span className="amount"></span>
-                                        {orders?.status}
-                                      </td>
-                                      <td className="product-price-cart">
-                                        {orders?.reason}
-                                      </td>
-                                    </tr>
-                                  );
-                                })}
-                              </tbody>
+                                        <td className="product-price-cart">
+                                          <span className="amount"></span>
+                                          {orders?.createdAt?.split("T")[0]}
+                                        </td>
+                                        <td className="product-price-cart">
+                                          <span className="amount"></span>
+                                          {orders?.orderid?.product?.price}
+                                        </td>
+                                        <td className="product-price-cart">
+                                          <span className="amount"></span>
+                                          {orders?.orderid?.cartId?.gst}
+                                        </td>
+                                        <td className="product-price-cart">
+                                          <span className="amount"></span>
+                                          {orders?.orderid?.cartId?.total_amt}
+                                        </td>
+                                        <td className="product-price-cart">
+                                          <span className="amount"></span>
+                                          {orders?.status}
+                                        </td>
+                                        <td className="product-price-cart">
+                                          {orders?.reason}
+                                        </td>
+                                      </tr>
+                                    );
+                                  })}
+                                </tbody>
+                              ) : null}
                             </table>
                           </div>
                         </div>
