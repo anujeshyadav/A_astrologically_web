@@ -24,6 +24,7 @@ const MyOrder = ({ location, args }) => {
   const [order, setOrder] = useState([]);
   const [modal, setModal] = useState(false);
   const [Refund, setRefund] = useState({});
+  const [GotRefund, setGotRefund] = useState([]);
   const [refundreason, setRefungReason] = useState("");
 
   const toggle = () => setModal(!modal);
@@ -32,7 +33,16 @@ const MyOrder = ({ location, args }) => {
     const { data } = await axiosConfig.get(`/user/myOrders/${userid}`);
     const order = data.data;
     setOrder(order);
-    console.log(order);
+
+    await axiosConfig
+      .get(`/user/userRefundList/63a1baa3ae6e54f1e2a002cc`)
+      .then((res) => {
+        console.log(res.data.data);
+        setGotRefund(res.data.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
   const hanldesubmitRefund = (e) => {
     e.preventDefault();
@@ -180,37 +190,43 @@ const MyOrder = ({ location, args }) => {
                 <section>
                   <Container>
                     <Fragment>
-                      <div className="d-flex justify-content-center">
-                        <h2 className="cart-page-title mb-4">
-                          Your Refund Applied
-                        </h2>
-                      </div>
+                      {GotRefund && (
+                        <div className="d-flex justify-content-center">
+                          <h2 className="cart-page-title mb-4">
+                            Your Refund Applied
+                          </h2>
+                        </div>
+                      )}
+
                       <div className="row">
                         <div className="col-12">
                           <div className="table-content table-responsive cart-table-content">
                             <table>
-                              <thead>
-                                <tr>
-                                  <th>ORDER ID</th>
-                                  <th>Image</th>
-                                  <th>Product Name</th>
-                                  <th>Purchasing Date</th>
+                              {GotRefund && (
+                                <thead>
+                                  <tr>
+                                    <th>ORDER ID</th>
+                                    <th>Image</th>
+                                    <th>Product Name</th>
+                                    <th>Purchasing Date</th>
 
-                                  <th>AMOUNT</th>
+                                    <th>AMOUNT</th>
 
-                                  <th>GST</th>
-                                  <th>Total Amount</th>
-                                  <th>Status</th>
-                                  <th>Refund</th>
-                                </tr>
-                              </thead>
+                                    <th>GST</th>
+                                    <th>Total Amount</th>
+                                    <th>Status</th>
+                                    <th>Reason for Refund</th>
+                                  </tr>
+                                </thead>
+                              )}
+
                               <tbody>
-                                {order?.map((orders, key) => {
+                                {GotRefund?.map((orders, key) => {
                                   return (
                                     <tr key={key}>
                                       <td className="product-price-cart">
                                         <span className="amount">
-                                          {orders?.orderId}
+                                          {orders?.orderid?.orderId}
                                         </span>
                                       </td>
                                       <td className="product-thumbnail">
@@ -220,7 +236,8 @@ const MyOrder = ({ location, args }) => {
                                             height="80px"
                                             className="img-fluid"
                                             src={
-                                              orders?.product?.product?.image[0]
+                                              orders?.orderid?.product?.product
+                                                ?.image[0]
                                             }
                                             alt=""
                                           />
@@ -230,12 +247,15 @@ const MyOrder = ({ location, args }) => {
                                       <td className="product-name text-center">
                                         <Link>
                                           {
-                                            orders?.product?.product
+                                            orders?.orderid?.product?.product
                                               ?.productname
                                           }
                                         </Link>
                                         <br />
-                                        <p>by:-{orders?.astroid?.fullname}</p>
+                                        <p>
+                                          by:-
+                                          {orders?.orderid?.astroid?.fullname}
+                                        </p>
                                         {orders?.product?.product?.qsCount ? (
                                           <>
                                             Question Count:{" "}
@@ -250,11 +270,11 @@ const MyOrder = ({ location, args }) => {
                                       </td>
                                       <td className="product-price-cart">
                                         <span className="amount"></span>
-                                        {orders?.cartId?.productid?.price}
+                                        {orders?.orderid?.product?.price}
                                       </td>
                                       <td className="product-price-cart">
                                         <span className="amount"></span>
-                                        {orders?.cartId.gst}
+                                        {orders?.cartId?.gst}
                                       </td>
                                       <td className="product-price-cart">
                                         <span className="amount"></span>
@@ -265,14 +285,7 @@ const MyOrder = ({ location, args }) => {
                                         {orders?.status}
                                       </td>
                                       <td className="product-price-cart">
-                                        <Button
-                                          onClick={(e) =>
-                                            hanleopenmodal(e, orders)
-                                          }
-                                          color="primary"
-                                        >
-                                          Apply for Refund
-                                        </Button>
+                                        {orders?.reason}
                                       </td>
                                     </tr>
                                   );

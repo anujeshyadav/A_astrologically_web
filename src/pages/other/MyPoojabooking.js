@@ -19,7 +19,7 @@ const MyOrder = ({ location }) => {
   const fetchOrder = async () => {
     let userid = JSON.parse(localStorage.getItem("user_id"));
     const { data } = await axiosConfig.get(
-      `/user/userBookedPujalist/632da83471b4d7fd47492f03`
+      `/user/userBookedPujalist/${userid}`
     );
     // const { data } = await axiosConfig.get(
     //   `/user/userBookedPujalist/${userid}`
@@ -29,6 +29,18 @@ const MyOrder = ({ location }) => {
     console.log(order);
   };
 
+  const handleDelete = (data) => {
+    console.log(data?._id);
+    axiosConfig
+      .get(`/admin/dltBookedPuja/${data?._id}`)
+      .then((res) => {
+        fetchOrder;
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   useEffect(() => {
     if (localStorage.getItem("user_id")) {
       fetchOrder();
@@ -66,6 +78,7 @@ const MyOrder = ({ location }) => {
                             <th>Slot</th>
                             <th>Address</th>
                             <th>Status</th>
+                            <th>Delete</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -127,6 +140,15 @@ const MyOrder = ({ location }) => {
                                 <td className="product-price-cart">
                                   <span className="amount"></span>
                                   {orders?.status}
+                                </td>
+                                <td className="product-price-cart">
+                                  <span
+                                    onClick={() => handleDelete(order)}
+                                    style={{ color: "Red" }}
+                                    className="amount"
+                                  >
+                                    Delete
+                                  </span>
                                 </td>
                               </tr>
                             );
