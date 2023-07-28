@@ -55,7 +55,6 @@ const WaitingPageVideo = ({ location, args }) => {
       axiosConfig
         .get(`/user/getOnenotificationByastro/${id}`)
         .then((res) => {
-          debugger;
           console.log("request status ", res.data.data);
           console.log("notificationid", res.data.data);
           if (

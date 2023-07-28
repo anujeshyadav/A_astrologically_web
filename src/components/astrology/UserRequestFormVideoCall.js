@@ -20,6 +20,8 @@ class UserRequestForm extends React.Component {
       userData: {},
       firstname: "",
       p_firstname: "",
+      showpartner: false,
+
       lastname: "",
       p_lastname: "",
       dob: "",
@@ -99,7 +101,6 @@ class UserRequestForm extends React.Component {
           .post(`/user/addCallWallet`, payload)
           .then((res) => {
             if (res.data.status === true) {
-              debugger;
               this.props.history.push({
                 pathname: "/waitingpagevideo",
                 state: res.data,
@@ -162,6 +163,29 @@ class UserRequestForm extends React.Component {
                   <div className="wal-amt">
                     <h3>Video InTake Form </h3>
                     <hr></hr>
+
+                    <div className="d-flex">
+                      <Row>
+                        <Col lg="2" sm="2" md="2">
+                          <input
+                            onClick={(e) => {
+                              console.log(e.target.checked);
+                              this.setState({ showpartner: e.target.checked });
+                            }}
+                            width={14}
+                            type="checkbox"
+                            id="vehicle1"
+                            name="vehicle1"
+                            value="Bike"
+                          />
+                        </Col>
+                        <Col>
+                          <span className="mt-2">
+                            Want to Add Partner Details{" "}
+                          </span>
+                        </Col>
+                      </Row>
+                    </div>
                     <form onSubmit={(e) => this.submitHandler(e)}>
                       <Row>
                         <Col md="4">
@@ -190,18 +214,7 @@ class UserRequestForm extends React.Component {
                             />
                           </div>
                         </Col>
-                        <Col md="4">
-                          <div class="form-group mtb-10">
-                            <label>Patner First Name</label>
-                            <input
-                              type="text"
-                              name="p_firstname"
-                              placeholder="Enter Your Patner firstname"
-                              value={this.state.p_firstname}
-                              onChange={this.changeHandler}
-                            />
-                          </div>
-                        </Col>
+
                         <Col md="4">
                           <div class="form-group mtb-10">
                             <label> Last Name*</label>
@@ -215,18 +228,7 @@ class UserRequestForm extends React.Component {
                             />
                           </div>
                         </Col>
-                        <Col md="4">
-                          <div class="form-group mtb-10">
-                            <label>Patner Last Name</label>
-                            <input
-                              type="text"
-                              name="p_lastname"
-                              placeholder="Enter Your Patner Lastname"
-                              value={this.state.p_lastname}
-                              onChange={this.changeHandler}
-                            />
-                          </div>
-                        </Col>
+
                         <Col md="4">
                           <div class="form-group mtb-10">
                             <label>Date of Birth*</label>
@@ -236,18 +238,6 @@ class UserRequestForm extends React.Component {
                               value={this.state.dob}
                               onChange={this.changeHandler}
                               required
-                              placeholder="Enter Your Number"
-                            />
-                          </div>
-                        </Col>
-                        <Col md="4">
-                          <div class="form-group mtb-10">
-                            <label> patner Date of Birth</label>
-                            <input
-                              type="date"
-                              name="p_dob"
-                              value={this.state.p_dob}
-                              onChange={this.changeHandler}
                               placeholder="Enter Your Number"
                             />
                           </div>
@@ -266,19 +256,6 @@ class UserRequestForm extends React.Component {
                             />
                           </div>
                         </Col>
-                        <Col md="4">
-                          <div class="form-group mtb-10">
-                            <label> patner Date of Time</label>
-                            <input
-                              type="time"
-                              name="p_date_of_time"
-                              value={this.state.p_date_of_time}
-                              onChange={this.changeHandler}
-                              // required
-                              placeholder="Enter Your Number"
-                            />
-                          </div>
-                        </Col>
 
                         <Col md="4">
                           <div class="form-group mtb-10">
@@ -293,19 +270,7 @@ class UserRequestForm extends React.Component {
                             />
                           </div>
                         </Col>
-                        <Col md="4">
-                          <div class="form-group mtb-10">
-                            <label> Patner Birth Place</label>
-                            <input
-                              type="text"
-                              name="p_birthPlace"
-                              value={this.state.p_birthPlace}
-                              onChange={this.changeHandler}
-                              // required
-                              placeholder="Enter Your  Birth Place"
-                            />
-                          </div>
-                        </Col>
+
                         <Col lg="6" md="6" className="mb-2">
                           <label>Gender*</label>
                           <Input
@@ -406,6 +371,73 @@ class UserRequestForm extends React.Component {
                             />
                           </div>
                         </Col>
+                        {this.state.showpartner ? (
+                          <>
+                            <Col md="4">
+                              <div class="form-group mtb-10">
+                                <label>Patner First Name</label>
+                                <input
+                                  type="text"
+                                  name="p_firstname"
+                                  placeholder="Enter Your Patner firstname"
+                                  value={this.state.p_firstname}
+                                  onChange={this.changeHandler}
+                                />
+                              </div>
+                            </Col>
+
+                            <Col md="4">
+                              <div class="form-group mtb-10">
+                                <label>Patner Last Name</label>
+                                <input
+                                  type="text"
+                                  name="p_lastname"
+                                  placeholder="Enter Your Patner Lastname"
+                                  value={this.state.p_lastname}
+                                  onChange={this.changeHandler}
+                                />
+                              </div>
+                            </Col>
+                            <Col md="4">
+                              <div class="form-group mtb-10">
+                                <label> patner Date of Birth</label>
+                                <input
+                                  type="date"
+                                  name="p_dob"
+                                  value={this.state.p_dob}
+                                  onChange={this.changeHandler}
+                                  placeholder="Enter Your Number"
+                                />
+                              </div>
+                            </Col>
+                            <Col md="4">
+                              <div class="form-group mtb-10">
+                                <label> patner Date of Time</label>
+                                <input
+                                  type="time"
+                                  name="p_date_of_time"
+                                  value={this.state.p_date_of_time}
+                                  onChange={this.changeHandler}
+                                  // required
+                                  placeholder="Enter Your Number"
+                                />
+                              </div>
+                            </Col>
+                            <Col md="4">
+                              <div class="form-group mtb-10">
+                                <label> Patner Birth Place</label>
+                                <input
+                                  type="text"
+                                  name="p_birthPlace"
+                                  value={this.state.p_birthPlace}
+                                  onChange={this.changeHandler}
+                                  // required
+                                  placeholder="Enter Your  Birth Place"
+                                />
+                              </div>
+                            </Col>
+                          </>
+                        ) : null}
                         <Col md="12" className="mt-3">
                           <Button className="btn btn-warning">
                             Start Video with {localStorage.getItem("astroname")}
