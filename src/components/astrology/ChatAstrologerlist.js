@@ -211,7 +211,7 @@ class ChatAstrologerlist extends React.Component {
     // this.props.history.push("/UserRequestFormCall");
     // let mobileNo = JSON.parse(localStorage.getItem("user_mobile_no"));
     let userId = JSON.parse(localStorage.getItem("user_id"));
-    localStorage.setItem("astroId", astroid);
+    localStorage.setItem("astroId", astrodata?._id);
     localStorage.setItem("astroname", astrodata?.fullname);
 
     if (userId !== "" && userId !== null) {

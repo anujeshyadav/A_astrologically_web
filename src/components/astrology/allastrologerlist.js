@@ -197,10 +197,12 @@ class AllAstrologerList extends React.Component {
   submitHandlerCall = (e, astroid, mobile, astrodata, index) => {
     e.preventDefault();
     console.log(astrodata);
+
     // this.props.history.push("/UserRequestFormCall");
     // let mobileNo = JSON.parse(localStorage.getItem("user_mobile_no"));
     let userId = JSON.parse(localStorage.getItem("user_id"));
-    localStorage.setItem("astroId", astroid);
+    localStorage.setItem("astroId", astrodata?._id);
+
     localStorage.setItem("astroname", astrodata?.fullname);
 
     if (userId !== "" && userId !== null) {
@@ -349,6 +351,7 @@ class AllAstrologerList extends React.Component {
 
   Detailpage = (e, id) => {
     e.preventDefault();
+    localStorage.setItem("astroId", id);
 
     // clearInterval(handleAllastro);
     this.props.history.push(`/astrologerdetail/${id}`);
