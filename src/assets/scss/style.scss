@@ -1698,3 +1698,14 @@ input.from-control.inputcheckbox.form-check-input {
 input#vehicle1 {
   width: 20px;
 }
+button.btn-as.st.btn.btn-secondary:hover {
+  background: rgb(41, 93, 29);
+  color:white
+}
+.frontside:hover {
+border-radius: 10px;
+  box-shadow: 5px 5px 5px -1px;
+ transform: rotateY(12deg);
+color: #f2b747;
+border: 1px solid #f2b747
+}

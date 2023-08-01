@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link, useHistory, useParams } from "react-router-dom";
 import { connect } from "react-redux";
 import MenuCart from "./sub-components/MenuCart";
@@ -20,12 +20,18 @@ const IconGroup = ({
   // const [balance, setbalance] = useState("");
   const [carts, setCarts] = useState([]);
   const [userBalance, setuserBalance] = useState("");
-
   const userdata = localStorage.getItem("userData");
+  const isMountedRef = useRef(true);
 
   useEffect(() => {
     fetchCustomer();
   }, [userdata]);
+
+  useEffect(() => {
+    return () => {
+      isMountedRef.current = false;
+    };
+  }, []);
 
   const handleClick = (e) => {
     e.currentTarget.nextSibling.classList.toggle("active");
@@ -45,20 +51,32 @@ const IconGroup = ({
   };
 
   //const { id } = useParams();
-  const userBal = () => {
-    setInterval(() => {
+  useEffect(() => {
+    const intervalId = setInterval(() => {
       const Balance = sessionStorage.getItem("userBalance");
       const userdata = localStorage.getItem("userData");
-      // setCustomer(JSON.parse(userdata));
       setuserBalance(Balance);
     }, 4000);
-  };
+
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, []);
+
+  // const userBal = () => {
+  //   setInterval(() => {
+  //     const Balance = sessionStorage.getItem("userBalance");
+  //     const userdata = localStorage.getItem("userData");
+  //     // setCustomer(JSON.parse(userdata));
+  //     setuserBalance(Balance);
+  //   }, 4000);
+  // };
 
   const Balance = sessionStorage.getItem("userBalance");
 
   useEffect(() => {
     Fetchuserdetail();
-    userBal();
+    // userBal();
   }, []);
 
   const history = useHistory();
@@ -87,16 +105,30 @@ const IconGroup = ({
   const fetchCustomer = async () => {
     let user_id = JSON.parse(localStorage.getItem("user_id"));
     if (user_id) {
-      await ViewOneUser(user_id)
-        .then((res) => {
-          // console.log("Icongroup", res);
+      try {
+        const res = await ViewOneUser(user_id);
+        if (isMountedRef.current) {
           setCustomer(res.data);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+        }
+      } catch (err) {
+        console.log(err);
+      }
     }
   };
+
+  // const fetchCustomer = async () => {
+  //   let user_id = JSON.parse(localStorage.getItem("user_id"));
+  //   if (user_id) {
+  //     await ViewOneUser(user_id)
+  //       .then((res) => {
+  //         // console.log("Icongroup", res);
+  //         setCustomer(res.data);
+  //       })
+  //       .catch((err) => {
+  //         console.log(err);
+  //       });
+  //   }
+  // };
   useEffect(() => {
     let data = localStorage.getItem("token");
     setToken(data);

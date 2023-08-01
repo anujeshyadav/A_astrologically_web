@@ -192,6 +192,7 @@ class UserRequestForm extends React.Component {
                           <div class="form-group mtb-10">
                             <label>Mobile Number*</label>
                             <input
+                              disabled
                               type="number"
                               name="mobile"
                               value={this.state.mobile}

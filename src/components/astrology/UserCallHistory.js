@@ -26,7 +26,7 @@ class UserCallHistory extends React.Component {
     axiosConfig
       .get(`/user/userCallHistory/${userId}`)
       .then((response) => {
-        console.log("userChatList", response.data.data);
+        console.log("userCallList", response.data.data);
         if (response.data.status === true) {
           this.setState({
             userChatList: response?.data?.data,

@@ -197,6 +197,7 @@ class UserRequestForm extends React.Component {
                           <input
                             type="number"
                             name="mobile"
+                            disabled
                             value={this.state.mobile}
                             onChange={this.changeHandler}
                             required

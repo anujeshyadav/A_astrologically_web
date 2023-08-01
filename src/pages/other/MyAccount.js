@@ -38,6 +38,7 @@ export default class MyAccount extends Component {
   };
   handlegetUser = () => {
     let user_id = JSON.parse(localStorage.getItem("user_id"));
+    console.log(user_id);
     axiosConfig
       .get(`/user/viewoneuser/${user_id}`)
       .then((response) => {
@@ -64,7 +65,7 @@ export default class MyAccount extends Component {
   };
   componentDidMount() {
     // let { id } = this.props.match.params;
-    // this.handlegetUser();
+    this.handlegetUser();
   }
   changeHandler1 = (e) => {
     this.setState({ status: e.target.value });
@@ -131,7 +132,7 @@ export default class MyAccount extends Component {
                 <Row>
                   <Col md="12">
                     <div className="leftcont text-left">
-                      <h1>My Account Information</h1>
+                      <h1>My Account Information's</h1>
                     </div>
                   </Col>
                 </Row>

@@ -43,12 +43,14 @@ class AstrologerDetail extends React.Component {
     this.state = {
       allminrechargeList: [],
       data: {},
-      astroData: {},
+      // astroData: {},
       Follow: null,
       UserId: "",
       Gallary: [],
       useramount: "",
       astroId: "",
+      astroData: null,
+      intervalId: null,
       astro: "",
       avg_rating: [false],
       GtRating: [],
@@ -67,17 +69,18 @@ class AstrologerDetail extends React.Component {
       modal: !this.state.modal,
     });
   }
+  componentWillUnmount() {
+    clearInterval(this.state.intervalId); // Clear the interval when the component unmounts
+  }
 
   handleStartViewOneAstro = () => {
-    setInterval(() => {
+    const intervalId = setInterval(() => {
       const { id } = this.props.match.params;
       axiosConfig
         .get(`/admin/getoneAstro/${id}`)
         .then((response) => {
           // console.log("getoneastro", response.data?.data);
-          if (response.data.data?.callingStatus === "Busy") {
-            console.log("Busy");
-          }
+
           localStorage.setItem("astroname", response?.data?.data?.fullname);
           localStorage.setItem(
             "channelName",
@@ -688,17 +691,31 @@ class AstrologerDetail extends React.Component {
                           </li>
                           <li>
                             Availability :
-                            <span style={{ color: "green" }}>
-                              {this.state.status === "Offline" ? (
-                                <>
-                                  <b style={{ color: "red" }}>Not Available</b>{" "}
-                                </>
-                              ) : (
-                                <>
-                                  <b> {this.state.astroData?.callingStatus} </b>
-                                </>
-                              )}
-                            </span>
+                            {/* <span style={{ color: "green" }}> */}
+                            {this.state.status === "Offline" ? (
+                              <>
+                                <b style={{ color: "red" }}>Not Available</b>{" "}
+                              </>
+                            ) : (
+                              <>
+                                {this.state.astroData?.callingStatus ===
+                                "Busy" ? (
+                                  <>
+                                    <b style={{ color: "red" }}>
+                                      {this.state.astroData?.callingStatus}
+                                    </b>{" "}
+                                  </>
+                                ) : (
+                                  <>
+                                    <b style={{ color: "green" }}>
+                                      {" "}
+                                      {this.state.astroData?.callingStatus}{" "}
+                                    </b>
+                                  </>
+                                )}
+                              </>
+                            )}
+                            {/* </span> */}
                           </li>
                           <li>
                             {this.state.astroData?.waiting_tym === 0 ? null : (
@@ -713,7 +730,7 @@ class AstrologerDetail extends React.Component {
                               </>
                             )}
                           </li>
-                          <li>
+                          {/* <li>
                             {this.state.status === "Online" ? (
                               <>
                                 <span style={{ color: "green" }} className="">
@@ -727,7 +744,7 @@ class AstrologerDetail extends React.Component {
                                 </span>{" "}
                               </>
                             )}
-                          </li>
+                          </li> */}
                         </ul>
                       </div>
 

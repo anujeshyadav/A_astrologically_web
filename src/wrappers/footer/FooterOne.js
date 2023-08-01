@@ -7,6 +7,8 @@ import FooterNewsletter from "../../components/footer/FooterNewsletter";
 import Axios from "axios";
 import OthePage from "../../components/astrology/OthePage";
 import axiosConfig from "../../axiosConfig";
+import LanguageCurrencyChanger from "../../components/header/sub-components/LanguageCurrencyChanger";
+import { Col, Row } from "reactstrap";
 
 const FooterOne = ({
   backgroundColorClass,
@@ -662,6 +664,15 @@ const FooterOne = ({
             />
           </div>
         </div>
+        <Row>
+          <Col>
+            <div className="d-flex justify-content-center">
+              <h4 className="pb-0" style={{ color: "white" }}>
+                © Powered by Techfuse Info Solutions
+              </h4>
+            </div>
+          </Col>
+        </Row>
       </div>
       <button
         className={`scroll-top ${scroll > top ? "show" : ""}`}

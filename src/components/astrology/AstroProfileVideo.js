@@ -38,7 +38,7 @@ export default function AstroProfileVideo() {
     loop: true,
     slidesPerView: 4,
     grabCursor: true,
-    spaceBetween: 10,
+    spaceBetween: 20,
 
     breakpoints: {
       1024: {
@@ -75,7 +75,12 @@ export default function AstroProfileVideo() {
     <>
       <Swiper {...settings}>
         {astroimage.map((value) => (
-          <Col key={value?._id} md="3" className="videoimg ">
+          <Col
+            style={{ padding: "20px 7px" }}
+            key={value?._id}
+            md="3"
+            className="videoimg  "
+          >
             <div key={value?._id} className="">
               <div class="product-image8">
                 {value?.file?.includes("mp4") ? (
