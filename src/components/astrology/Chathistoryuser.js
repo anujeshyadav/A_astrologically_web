@@ -116,7 +116,7 @@ class Chathistoryuser extends React.Component {
 
                                 <td>{user?.astroId?.callCharge}/Min.</td>
 
-                                <td>{user?.Duration} Sec</td>
+                                <td>{user?.Duration} Min</td>
                                 <td>{user?.userdeductedAmt} Rs</td>
                                 <td>{user?.createdAt}</td>
                                 {/* <td>
