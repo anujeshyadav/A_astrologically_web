@@ -255,7 +255,7 @@ class ChatApp extends React.Component {
   handlelivechat = () => {
     setInterval(() => {
       this.handlechat();
-    }, 4000);
+    }, 2000);
   };
 
   getChatRoomId = async (user, index) => {
