@@ -24,7 +24,7 @@ class ChatAppList extends React.Component {
       });
     let userId = JSON.parse(localStorage.getItem("user_id"));
 
-    console.log(userId);
+    // console.log(userId);
     axiosConfig
       .get(`/user/getroomid/${userId}`)
       .then((response) => {

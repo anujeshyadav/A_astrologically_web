@@ -13,27 +13,30 @@ class ChatAppMassage extends React.Component {
   render() {
     return (
       <>
-        {this.props.roomChatData.length
-          ? this.props.roomChatData
+        {this.props?.roomChatData?.length
+          ? this.props?.roomChatData
               .map((chat, index) => {
                 return (
                   <>
                     {chat.type === "user" ? (
                       <div key={index} className="message me">
-                        <div className="message-body">{chat.msg}</div>
+                        <div className="message-body">{chat?.msg}</div>
                       </div>
                     ) : (
                       <div key={index} className="message">
                         <div class="message-body">
                           <Row>
-                            <Col lg="4">
-                              <img
-                                style={{ borderRadius: "50%" }}
-                                width="40px"
-                                height="40px"
-                                src={chat?.userid?.userimg}
-                              />
-                            </Col>
+                            {chat?.userid?.userimg && (
+                              <Col lg="4">
+                                <img
+                                  style={{ borderRadius: "50%" }}
+                                  width="40px"
+                                  height="40px"
+                                  src={chat?.userid?.userimg}
+                                />
+                              </Col>
+                            )}
+
                             <Col lg="">
                               <Row>
                                 <h6 className="container">

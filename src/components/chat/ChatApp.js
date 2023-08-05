@@ -171,7 +171,6 @@ class ChatApp extends React.Component {
   }
 
   getChatRoom = (data, status) => {
-    console.log("current astro");
     this.setState({ Historydata: status });
 
     // this.setState({ Historydata: false });
@@ -240,17 +239,31 @@ class ChatApp extends React.Component {
       });
   };
   handlechat = () => {
-    axiosConfig
-      .get(`/user/allchatwithuser/${this.state.CurrentRoomid}`)
-      .then((response) => {
-        console.log(response?.data?.data);
-        if (response.data.status === true) {
-          this.setState({ roomChatData: response?.data.data });
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    if (this.state.CurrentRoomid) {
+      axiosConfig
+        .get(`/user/allchatwithuser/${this.state.CurrentRoomid}`)
+        .then((response) => {
+          console.log(response?.data?.data);
+          if (response.data.status === true) {
+            this.setState({ roomChatData: response?.data.data });
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } else {
+      let userid = JSON.parse(localStorage.getItem("user_id"));
+
+      axiosConfig
+        .get(`/user/getroomid/${userid}`)
+        .then((res) => {
+          console.log(res.data.data);
+          this.setState({ CurrentRoomid: response.data.data?.roomid });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   };
   handlelivechat = () => {
     setInterval(() => {
@@ -259,6 +272,7 @@ class ChatApp extends React.Component {
   };
 
   getChatRoomId = async (user, index) => {
+    console.log(user);
     this.setState({ Historydata: true });
     this.setState({ sendbutton: user.astroid?._id });
     this.setState({ Index: index });
