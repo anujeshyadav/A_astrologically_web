@@ -300,7 +300,7 @@ class ChatApp extends React.Component {
         .get(`/user/getroomid/${userid}`)
         .then((res) => {
           console.log(res.data.data);
-          this.setState({ CurrentRoomid: response.data.data?.roomid });
+          this.setState({ CurrentRoomid: res.data.data?.roomid });
         })
         .catch((err) => {
           console.log(err);
