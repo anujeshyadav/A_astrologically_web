@@ -21,13 +21,13 @@ class LiveAstrologer extends React.Component {
       axiosConfig
         .get(`/user/listLiveStreamAstro`)
         .then((res) => {
-          this.handleSetInterval();
+          // this.handleSetInterval();
           this.setState({ liveastrilist: res.data.data });
         })
         .catch((err) => {
           console.log(err);
         });
-      console.log("object");
+      // console.log("object");
     }, 40000);
   };
 

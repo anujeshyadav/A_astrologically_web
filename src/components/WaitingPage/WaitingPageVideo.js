@@ -27,6 +27,7 @@ const WaitingPageVideo = ({ location, args }) => {
   const [order, setOrder] = useState([]);
   const [modal, setModal] = useState(false);
   const [Refund, setRefund] = useState({});
+  const [loader, setloader] = useState(true);
 
   const history = useHistory();
   const mylocation = useLocation();
@@ -61,6 +62,8 @@ const WaitingPageVideo = ({ location, args }) => {
             res?.data?.data?.status === "Accept" &&
             res?.data?.data?.type === "Video"
           ) {
+            setloader(false);
+
             swal("Request Accepted", "Wait Till Astro Joins Videocall");
             clearInterval(interval);
             history.push(`/userVideoCall/${res.data.data?._id}`);
@@ -89,18 +92,21 @@ const WaitingPageVideo = ({ location, args }) => {
 
   return (
     <Fragment>
-      <BreadcrumbsItem to={process.env.PUBLIC_URL + "/"}>Home</BreadcrumbsItem>
-      <BreadcrumbsItem to={process.env.PUBLIC_URL + pathname}>
-        Waiting page
-      </BreadcrumbsItem>
-
       <LayoutOne headerTop="visible">
         <Breadcrumb />
         <section style={{ padding: "180px 0px" }}>
           <Container>
-            <div className="d-flex justify-content-center align-item-center">
-              <h3>Wait Till Astrologer Accept Your Request...</h3>
-            </div>
+            {loader && (
+              <>
+                <div className="d-flex justify-content-center mb-4">
+                  <div class="custom-loader"></div>
+                </div>
+                <div className="d-flex justify-content-center align-item-center">
+                  <h3>Wait Till Astrologer Accept Your Request...</h3>
+                  <h3>Do not Refresh Your Page...</h3>
+                </div>
+              </>
+            )}
           </Container>
         </section>
       </LayoutOne>

@@ -38,9 +38,7 @@ const IconGroup = ({
   };
   const handleLogout = (e) => {
     window.localStorage.clear();
-    // window.location.reload()
     window.location.replace("/");
-    //  window.location.replace("http://soxypay.com/");
   };
 
   const triggerMobileMenu = () => {
@@ -77,7 +75,7 @@ const IconGroup = ({
   useEffect(() => {
     Fetchuserdetail();
     // userBal();
-  }, []);
+  }, [Balance]);
 
   const history = useHistory();
 
@@ -240,10 +238,6 @@ const IconGroup = ({
                         <>{customer?.amount}</>
                       )}
                     </span>
-                    {/* <span className="ml-2">₹{customer?.amount}</span> */}
-                    {/* <span className="ml-2">
-                      ₹ <FetchUserBalance />
-                    </span> */}
                   </Link>
                 </li>
                 <li>
@@ -363,7 +357,7 @@ export const Fetchuserdetail = async () => {
     await axiosConfig
       .get(`/user/viewoneuser/${user_id}`)
       .then((response) => {
-        console.log("icongroug", response);
+        // console.log("icongroug", response);
         sessionStorage.setItem("userBalance", response?.data?.data?.amount);
         console.log(response.data.data.amount);
       })

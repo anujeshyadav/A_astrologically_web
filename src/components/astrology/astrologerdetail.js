@@ -839,10 +839,11 @@ class AstrologerDetail extends React.Component {
                       </Row>
                     </Col>
                   </Row>
-
-                  <div className="mt-2 pt-1">
-                    <AstroProfileVideo />
-                  </div>
+                  <section>
+                    <div className="mt-2 pt-1 container">
+                      <AstroProfileVideo />
+                    </div>
+                  </section>
                 </section>
                 <section className="mt-50 mb-30">
                   <div

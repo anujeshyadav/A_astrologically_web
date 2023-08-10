@@ -6,6 +6,8 @@ import swal from "sweetalert";
 import Select from "react-select";
 import { Country, State, City } from "country-state-city";
 import astrologinbg from "../../assets/img/astrologin-bg.jpg";
+import ChatList from "../chatList/ChatList";
+import { Link } from "react-router-dom/cjs/react-router-dom.min";
 
 class UserRequestForm extends React.Component {
   constructor(props) {
@@ -17,6 +19,7 @@ class UserRequestForm extends React.Component {
       firstname: "",
       p_firstname: "",
       lastname: "",
+      Addnewform: true,
       p_lastname: "",
       showpartner: false,
       dob: "",
@@ -155,364 +158,394 @@ class UserRequestForm extends React.Component {
           </div>
         </section>
         <section className="">
-          <Container>
-            <Row>
-              <Col lg="12">
-                <div className="wal-amt">
-                  <h3>Chat InTake Form </h3>
+          {this.state.Addnewform ? (
+            <>
+              <Container>
+                <Row>
+                  <Col lg="12">
+                    <div className="wal-amt">
+                      <h3>Chat InTake Form </h3>
 
-                  <hr></hr>
+                      <hr></hr>
 
-                  <div className="d-flex">
-                    <Row>
-                      <Col lg="2" sm="2" md="2">
-                        <input
-                          onClick={(e) => {
-                            console.log(e.target.checked);
-                            this.setState({ showpartner: e.target.checked });
-                          }}
-                          width={14}
-                          type="checkbox"
-                          id="vehicle1"
-                          name="vehicle1"
-                          value="Bike"
-                        />
-                      </Col>
-                      <Col>
-                        <span className="mt-2">
-                          Want to Add Partner Details{" "}
-                        </span>
-                      </Col>
-                    </Row>
-                  </div>
-                  <form onSubmit={(e) => this.submitHandler(e)}>
-                    <Row>
-                      <Col md="4">
-                        <div class="form-group mtb-10">
-                          <label>Mobile Number*</label>
-                          <input
-                            disabled
-                            type="number"
-                            name="mobile"
-                            value={this.state.mobile}
-                            onChange={this.changeHandler}
-                            required
-                            placeholder="Enter Your Number"
-                          />
-                        </div>
-                      </Col>
-                      <Col md="4">
-                        <div class="form-group mtb-10">
-                          <label>First Name*</label>
-                          <input
-                            type="text"
-                            name="firstname"
-                            required
-                            placeholder="Enter Your FirstName"
-                            value={this.state.fullname}
-                            onChange={this.changeHandler}
-                          />
-                        </div>
-                      </Col>
-
-                      <Col md="4">
-                        <div class="form-group mtb-10">
-                          <label> Last Name*</label>
-                          <input
-                            required
-                            type="text"
-                            name="lastname"
-                            placeholder="Enter Your  Lastname"
-                            value={this.state.lastname}
-                            onChange={this.changeHandler}
-                          />
-                        </div>
-                      </Col>
-
-                      <Col md="4">
-                        <div class="form-group mtb-10">
-                          <label>Date of Birth</label>
-                          <input
-                            type="date"
-                            name="dob"
-                            value={this.state.dob}
-                            onChange={this.changeHandler}
-                            required
-                            placeholder="Enter Your Number"
-                          />
-                        </div>
-                      </Col>
-
-                      <Col md="4">
-                        <div class="form-group mtb-10">
-                          <label>Time of Birth*</label>
-                          <input
-                            type="time"
-                            name="date_of_time"
-                            value={this.state.date_of_time}
-                            onChange={this.changeHandler}
-                            required
-                            placeholder="Enter Your Number"
-                          />
-                        </div>
-                      </Col>
-
-                      <Col md="4">
-                        <div class="form-group mtb-10">
-                          <label>Birth Place*</label>
-                          <input
-                            type="text"
-                            name="birthPlace"
-                            value={this.state.birthPlace}
-                            onChange={this.changeHandler}
-                            required
-                            placeholder="Enter Your  Birth Place"
-                          />
-                        </div>
-                      </Col>
-                      <Col md="4">
-                        <label>Country</label>
-                        <Select
-                          required
-                          options={Country.getAllCountries()}
-                          getOptionLabel={(options) => {
-                            return options["name"];
-                          }}
-                          getOptionValue={(options) => {
-                            return options["name"];
-                          }}
-                          value={this.state.selectedCountry}
-                          onChange={(item) => {
-                            //setSelectedCountry(item);
-                            this.setState({ selectedCountry: item });
-                            axiosConfig
-                              .post(`/user/time_zone`, {
-                                country_code: item?.timezones[0].zoneName,
-                              })
-                              .then((response) => {})
-                              .catch((error) => {
-                                console.log(error);
-                              });
-                          }}
-                        />
-                      </Col>
-
-                      <Col md="4">
-                        <label>State</label>
-                        <Select
-                          required
-                          options={State?.getStatesOfCountry(
-                            this.state.selectedCountry?.isoCode
-                          )}
-                          getOptionLabel={(options) => {
-                            return options["name"];
-                          }}
-                          getOptionValue={(options) => {
-                            return options["name"];
-                          }}
-                          value={this.state.selectedState}
-                          onChange={(item) => {
-                            this.setState({ selectedState: item });
-                          }}
-                        />
-                      </Col>
-
-                      <Col md="4">
-                        <label>City</label>
-                        <Select
-                          required
-                          options={City.getCitiesOfState(
-                            this.state.selectedState?.countryCode,
-                            this.state.selectedState?.isoCode
-                          )}
-                          getOptionLabel={(options) => {
-                            return options["name"];
-                          }}
-                          getOptionValue={(options) => {
-                            return options["name"];
-                          }}
-                          value={this.state.selectedCity}
-                          onChange={(item) => {
-                            //setSelectedCity(item);
-                            this.setState({ selectedCity: item });
-                          }}
-                        />
-                      </Col>
-
-                      <Col lg="6" md="6" className="mb-2">
-                        <label>Gender*</label>
-                        <Input
-                          required
-                          id="exampleSelect"
-                          name="gender"
-                          type="select"
-                          value={this.state.data.gender}
-                          onChange={this.changeHandler}
-                        >
-                          <option>Select Gender</option>
-                          <option>Male</option>
-                          <option>Female</option>
-                        </Input>
-                      </Col>
-
-                      <Col md="4">
-                        <div class="form-group mtb-10">
-                          <label>Marital Status*</label>
-                          <Input
-                            required
-                            type="select"
-                            name="marital_status"
-                            value={this.state.marital_status}
-                            onChange={this.changeHandler}
-                          >
-                            <option>Select Marital Status</option>
-                            <option>Single</option>
-                            <option>Married</option>
-                            <option>Divorced</option>
-                            <option>Separated</option>
-                            <option>Widowed</option>
-                          </Input>
-                        </div>
-                      </Col>
-                      <Col md="4">
-                        <div class="form-group mtb-10">
-                          <label>Occupation*</label>
-                          <Input
-                            type="select"
-                            name="occupation"
-                            value={this.state.data.occupation}
-                            onChange={this.changeHandler}
-                          >
-                            <option>Select Employed in</option>
-                            <option>Private Sector</option>
-                            <option>Govt Sector</option>
-                            <option>Business/Self Employed</option>
-                            <option>Civil Services</option>
-                            <option>Defence</option>
-                            <option>Not Working</option>
-                            <option>Student</option>
-                          </Input>
-                        </div>
-                      </Col>
-                      <Col md="4">
-                        <div class="form-group mtb-10">
-                          <label>Topic of concern*</label>
-                          <Input
-                            type="select"
-                            name="topic_of_cnsrn"
-                            value={this.state.data.topic_of_cnsrn}
-                            onChange={this.changeHandler}
-                          >
-                            <option>Select Topic</option>
-                            <option>Career and Business</option>
-                            <option>Marriage</option>
-                            <option>Love and Relationship</option>
-                            <option>Wealth and Property</option>
-                            <option>Education</option>
-                            <option>Legal Matters</option>
-                            <option>Child Name Consultation</option>
-                            <option>Business Name Consultation</option>
-                            <option>Gem Stone Consultation</option>
-                            <option>Commodity trading consultation</option>
-                            <option>Match making</option>
-                            <option>Birth Time Rectification</option>
-                            <option>Name Correction Consultation</option>
-                            <option>Travel Abroad Consulation</option>
-                            <option>Remedy Consultation</option>
-                            <option>Health Consultation</option>
-                            <option>Others</option>
-                          </Input>
-                        </div>
-                      </Col>
-                      <Col md="4">
-                        <div class="form-group mtb-10">
-                          <label>Enter topic of concern:</label>
-                          <input
-                            type="text"
-                            name="entertopic_of_cnsrn"
-                            required
-                            placeholder="Enter Your Fullname"
-                            value={this.state.entertopic_of_cnsrn}
-                            onChange={this.changeHandler}
-                          />
-                        </div>
-                      </Col>
-                      {this.state.showpartner ? (
-                        <>
+                      <div className="d-flex">
+                        <Row>
+                          <Col lg="2" sm="2" md="2">
+                            <input
+                              onClick={(e) => {
+                                console.log(e.target.checked);
+                                this.setState({
+                                  showpartner: e.target.checked,
+                                });
+                              }}
+                              width={14}
+                              type="checkbox"
+                              id="vehicle1"
+                              name="vehicle1"
+                              value="Bike"
+                            />
+                          </Col>
+                          <Col>
+                            <span className="mt-2">
+                              Want to Add Partner Details{" "}
+                            </span>
+                          </Col>
+                        </Row>
+                      </div>
+                      <form onSubmit={(e) => this.submitHandler(e)}>
+                        <Row>
                           <Col md="4">
                             <div class="form-group mtb-10">
-                              <label>Patner First Name</label>
+                              <label>Mobile Number*</label>
                               <input
-                                type="text"
-                                name="p_firstname"
-                                placeholder="Enter Your Patner firstname"
-                                value={this.state.p_firstname}
+                                disabled
+                                type="number"
+                                name="mobile"
+                                value={this.state.mobile}
                                 onChange={this.changeHandler}
+                                required
+                                placeholder="Enter Your Number"
                               />
                             </div>
                           </Col>
                           <Col md="4">
                             <div class="form-group mtb-10">
-                              <label>Patner Last Name</label>
+                              <label>First Name*</label>
                               <input
                                 type="text"
-                                name="p_lastname"
-                                placeholder="Enter Your Patner Lastname"
-                                value={this.state.p_lastname}
+                                name="firstname"
+                                required
+                                placeholder="Enter Your FirstName"
+                                value={this.state.fullname}
                                 onChange={this.changeHandler}
                               />
                             </div>
                           </Col>
+
                           <Col md="4">
                             <div class="form-group mtb-10">
-                              <label> Partner Date of Birth</label>
+                              <label> Last Name*</label>
+                              <input
+                                required
+                                type="text"
+                                name="lastname"
+                                placeholder="Enter Your  Lastname"
+                                value={this.state.lastname}
+                                onChange={this.changeHandler}
+                              />
+                            </div>
+                          </Col>
+
+                          <Col md="4">
+                            <div class="form-group mtb-10">
+                              <label>Date of Birth</label>
                               <input
                                 type="date"
-                                name="p_dob"
-                                value={this.state.p_dob}
+                                name="dob"
+                                value={this.state.dob}
                                 onChange={this.changeHandler}
+                                required
                                 placeholder="Enter Your Number"
                               />
                             </div>
                           </Col>
+
                           <Col md="4">
                             <div class="form-group mtb-10">
-                              <label> Patner Time of birth</label>
+                              <label>Time of Birth*</label>
                               <input
                                 type="time"
-                                name="p_date_of_time"
-                                value={this.state.p_date_of_time}
+                                name="date_of_time"
+                                value={this.state.date_of_time}
                                 onChange={this.changeHandler}
+                                required
                                 placeholder="Enter Your Number"
                               />
                             </div>
                           </Col>
+
                           <Col md="4">
                             <div class="form-group mtb-10">
-                              <label> Partner Birth Place</label>
+                              <label>Birth Place*</label>
                               <input
                                 type="text"
-                                name="p_birthPlace"
-                                value={this.state.p_birthPlace}
+                                name="birthPlace"
+                                value={this.state.birthPlace}
                                 onChange={this.changeHandler}
-                                // required
+                                required
                                 placeholder="Enter Your  Birth Place"
                               />
                             </div>
                           </Col>
-                        </>
-                      ) : null}
-                      <Col md="12" className="mt-3">
-                        <Button type="submit" className="btn btn-warning">
-                          Start chat with {localStorage.getItem("astroname")}
-                        </Button>
-                      </Col>
-                    </Row>
-                  </form>
-                </div>
-              </Col>
-            </Row>
-          </Container>
+                          <Col md="4">
+                            <label>Country</label>
+                            <Select
+                              required
+                              options={Country.getAllCountries()}
+                              getOptionLabel={(options) => {
+                                return options["name"];
+                              }}
+                              getOptionValue={(options) => {
+                                return options["name"];
+                              }}
+                              value={this.state.selectedCountry}
+                              onChange={(item) => {
+                                //setSelectedCountry(item);
+                                this.setState({ selectedCountry: item });
+                                axiosConfig
+                                  .post(`/user/time_zone`, {
+                                    country_code: item?.timezones[0].zoneName,
+                                  })
+                                  .then((response) => {})
+                                  .catch((error) => {
+                                    console.log(error);
+                                  });
+                              }}
+                            />
+                          </Col>
+
+                          <Col md="4">
+                            <label>State</label>
+                            <Select
+                              required
+                              options={State?.getStatesOfCountry(
+                                this.state.selectedCountry?.isoCode
+                              )}
+                              getOptionLabel={(options) => {
+                                return options["name"];
+                              }}
+                              getOptionValue={(options) => {
+                                return options["name"];
+                              }}
+                              value={this.state.selectedState}
+                              onChange={(item) => {
+                                this.setState({ selectedState: item });
+                              }}
+                            />
+                          </Col>
+
+                          <Col md="4">
+                            <label>City</label>
+                            <Select
+                              required
+                              options={City.getCitiesOfState(
+                                this.state.selectedState?.countryCode,
+                                this.state.selectedState?.isoCode
+                              )}
+                              getOptionLabel={(options) => {
+                                return options["name"];
+                              }}
+                              getOptionValue={(options) => {
+                                return options["name"];
+                              }}
+                              value={this.state.selectedCity}
+                              onChange={(item) => {
+                                //setSelectedCity(item);
+                                this.setState({ selectedCity: item });
+                              }}
+                            />
+                          </Col>
+
+                          <Col lg="6" md="6" className="mb-2">
+                            <label>Gender*</label>
+                            <Input
+                              required
+                              id="exampleSelect"
+                              name="gender"
+                              type="select"
+                              value={this.state.data.gender}
+                              onChange={this.changeHandler}
+                            >
+                              <option>Select Gender</option>
+                              <option>Male</option>
+                              <option>Female</option>
+                            </Input>
+                          </Col>
+
+                          <Col md="4">
+                            <div class="form-group mtb-10">
+                              <label>Marital Status*</label>
+                              <Input
+                                required
+                                type="select"
+                                name="marital_status"
+                                value={this.state.marital_status}
+                                onChange={this.changeHandler}
+                              >
+                                <option>Select Marital Status</option>
+                                <option>Single</option>
+                                <option>Married</option>
+                                <option>Divorced</option>
+                                <option>Separated</option>
+                                <option>Widowed</option>
+                              </Input>
+                            </div>
+                          </Col>
+                          <Col md="4">
+                            <div class="form-group mtb-10">
+                              <label>Occupation*</label>
+                              <Input
+                                type="select"
+                                name="occupation"
+                                value={this.state.data.occupation}
+                                onChange={this.changeHandler}
+                              >
+                                <option>Select Employed in</option>
+                                <option>Private Sector</option>
+                                <option>Govt Sector</option>
+                                <option>Business/Self Employed</option>
+                                <option>Civil Services</option>
+                                <option>Defence</option>
+                                <option>Not Working</option>
+                                <option>Student</option>
+                              </Input>
+                            </div>
+                          </Col>
+                          <Col md="4">
+                            <div class="form-group mtb-10">
+                              <label>Topic of concern*</label>
+                              <Input
+                                type="select"
+                                name="topic_of_cnsrn"
+                                value={this.state.data.topic_of_cnsrn}
+                                onChange={this.changeHandler}
+                              >
+                                <option>Select Topic</option>
+                                <option>Career and Business</option>
+                                <option>Marriage</option>
+                                <option>Love and Relationship</option>
+                                <option>Wealth and Property</option>
+                                <option>Education</option>
+                                <option>Legal Matters</option>
+                                <option>Child Name Consultation</option>
+                                <option>Business Name Consultation</option>
+                                <option>Gem Stone Consultation</option>
+                                <option>Commodity trading consultation</option>
+                                <option>Match making</option>
+                                <option>Birth Time Rectification</option>
+                                <option>Name Correction Consultation</option>
+                                <option>Travel Abroad Consulation</option>
+                                <option>Remedy Consultation</option>
+                                <option>Health Consultation</option>
+                                <option>Others</option>
+                              </Input>
+                            </div>
+                          </Col>
+                          <Col md="4">
+                            <div class="form-group mtb-10">
+                              <label>Enter topic of concern:</label>
+                              <input
+                                type="text"
+                                name="entertopic_of_cnsrn"
+                                required
+                                placeholder="Enter Your Fullname"
+                                value={this.state.entertopic_of_cnsrn}
+                                onChange={this.changeHandler}
+                              />
+                            </div>
+                          </Col>
+                          {this.state.showpartner ? (
+                            <>
+                              <Col md="4">
+                                <div class="form-group mtb-10">
+                                  <label>Patner First Name</label>
+                                  <input
+                                    type="text"
+                                    name="p_firstname"
+                                    placeholder="Enter Your Patner firstname"
+                                    value={this.state.p_firstname}
+                                    onChange={this.changeHandler}
+                                  />
+                                </div>
+                              </Col>
+                              <Col md="4">
+                                <div class="form-group mtb-10">
+                                  <label>Patner Last Name</label>
+                                  <input
+                                    type="text"
+                                    name="p_lastname"
+                                    placeholder="Enter Your Patner Lastname"
+                                    value={this.state.p_lastname}
+                                    onChange={this.changeHandler}
+                                  />
+                                </div>
+                              </Col>
+                              <Col md="4">
+                                <div class="form-group mtb-10">
+                                  <label> Partner Date of Birth</label>
+                                  <input
+                                    type="date"
+                                    name="p_dob"
+                                    value={this.state.p_dob}
+                                    onChange={this.changeHandler}
+                                    placeholder="Enter Your Number"
+                                  />
+                                </div>
+                              </Col>
+                              <Col md="4">
+                                <div class="form-group mtb-10">
+                                  <label> Patner Time of birth</label>
+                                  <input
+                                    type="time"
+                                    name="p_date_of_time"
+                                    value={this.state.p_date_of_time}
+                                    onChange={this.changeHandler}
+                                    placeholder="Enter Your Number"
+                                  />
+                                </div>
+                              </Col>
+                              <Col md="4">
+                                <div class="form-group mtb-10">
+                                  <label> Partner Birth Place</label>
+                                  <input
+                                    type="text"
+                                    name="p_birthPlace"
+                                    value={this.state.p_birthPlace}
+                                    onChange={this.changeHandler}
+                                    // required
+                                    placeholder="Enter Your  Birth Place"
+                                  />
+                                </div>
+                              </Col>
+                            </>
+                          ) : null}
+                          <Col md="12" className="mt-3">
+                            <Button type="submit" className="btn btn-warning">
+                              Start chat with{" "}
+                              {localStorage.getItem("astroname")}
+                            </Button>
+                          </Col>
+                        </Row>
+                      </form>
+                    </div>
+                  </Col>
+                </Row>
+              </Container>
+            </>
+          ) : (
+            <>
+              <Container>
+                <section className="mt-25">
+                  <div>
+                    <div className="py-3">
+                      {/* <Link to="/userrequestform" className="btn btn-denger wr"> */}
+                      <button
+                        onClick={(e) => {
+                          e.preventDefault();
+                          this.setState({ Addnewform: true });
+                        }}
+                        className="btn btn-denger wr"
+                      >
+                        Add New Intake Form
+                      </button>
+                      {/* </Link> */}
+                    </div>
+                    <ChatList />
+                  </div>
+                </section>
+              </Container>
+            </>
+          )}
         </section>
       </LayoutOne>
     );
