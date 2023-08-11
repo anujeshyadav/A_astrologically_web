@@ -668,7 +668,8 @@ const FooterOne = ({
           <Col>
             <div className="d-flex justify-content-center">
               <h4 className="pb-0" style={{ color: "white" }}>
-                © Powered by Techfuse Info Solutions
+                {/* © Powered by Techfuse Info Solutions */}© Owned by Sveltose
+                Technologies private limited
               </h4>
             </div>
           </Col>
